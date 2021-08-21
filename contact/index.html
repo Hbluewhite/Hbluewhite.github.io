@@ -351,7 +351,9 @@
 
 
 <script>
-    $('.bg-cover').css('background-image', 'url(/medias/banner/0.jpg)');
+    // 每天切换 banner 图.  Switch banner image every day.
+    var bannerUrl = "/medias/banner/" + new Date().getDay() + '.jpg';
+    $('.bg-cover').css('background-image', 'url(' + bannerUrl + ')');
 </script>
 
 
@@ -359,12 +361,12 @@
 </div>
 
 <style>
-    #send{
+    send{
         margin-bottom: 10px;
         width: 49%;
         background-color: #0ba360;
     }
-    #clear{
+    clear{
         margin-bottom: 10px;
         width: 49%;
         background-color: #e7c65c;
