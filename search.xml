@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>欢迎来到Hbluewhite的博客</title>
+      <link href="/2021/08/20/%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0Hbluewhite%E7%9A%84%E5%8D%9A%E5%AE%A2/"/>
+      <url>/2021/08/20/%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0Hbluewhite%E7%9A%84%E5%8D%9A%E5%AE%A2/</url>
+      
+        <content type="html"><![CDATA[<h2 id="RCE远程代码-命令执行"><a href="#RCE远程代码-命令执行" class="headerlink" title="RCE远程代码/命令执行"></a>RCE远程代码/命令执行</h2><h2 id="RCE概述"><a href="#RCE概述" class="headerlink" title="RCE概述"></a>RCE概述</h2><p>RCE漏洞，可以让攻击者直接向后台服务器远程注入操作系统命令或者代码，从而控制后台系统。</p><h2 id="RCE漏洞产生的原因"><a href="#RCE漏洞产生的原因" class="headerlink" title="RCE漏洞产生的原因"></a>RCE漏洞产生的原因</h2><p>一般出现这种漏洞，是因为应用系统从设计上需要给用户提供指定的远程命令操作的接口，比如我们常见的路由器、防火墙、入侵检测等设备的web管理界面上。一般会给用户提供一个ping操作的web界面，用户从web界面输入目标IP，提交后，后台会对该IP地址进行一次ping测试，并且返回测试结果。如果设计者在完成该功能时，没有做严格的安全控制，则可能会导致攻击者通过该接口提交“意想不到”的命令，从而让后台执行，从而控制整个后台服务器。</p><p><strong>具体的后端代码</strong></p><p><code>$result . =shell_exec(&#39;ping &#39; .$ip);</code>//直接将变量拼接进来，没做处理</p><p><code>if(@!eval($_POST[&#39;txt&#39;]))</code>//远程代码执行evel。</p><p>这里和上面执行ping指令不同的时，这里是php代码，而上面执行的是命令行。</p><h2 id="攻击"><a href="#攻击" class="headerlink" title="攻击"></a>攻击</h2><p>Windows管道符</p><table><thead><tr><th>管理符</th><th>作用</th><th>举例</th></tr></thead><tbody><tr><td>|</td><td>直接执行后面的语句</td><td>ping 127.0.0.1|whoami</td></tr><tr><td>||</td><td>前面的语句执行出错则执行后面的语句</td><td>ping 127.0.0.1||whoami</td></tr><tr><td>&amp;</td><td>前面的语句为假则执行后面的语句</td><td>ping 127.0.0.1&amp;whoami</td></tr><tr><td>&amp;&amp;</td><td>前面的语句为假，直接出错，前面的语句为真，执行后面的语句</td><td>ping 127.0.0.1&amp;&amp;whoami</td></tr><tr><td>；</td><td>先执前面的语句后执行后面的语句</td><td>ping 127.0.0.1;whoami</td></tr></tbody></table><p>一般我们是需要用后面的语句来进行攻击，所以首选|。</p><h2 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h2><p>尽量不要使用命令执行函数</p><p>不要让用户控制参数</p><p>执行前做好检测和过滤</p><h2 id="PHP命令执行函数"><a href="#PHP命令执行函数" class="headerlink" title="PHP命令执行函数"></a>PHP命令执行函数</h2><ol><li>system():</li></ol><p>system 执行外部程序（命令行），并且显示输出</p><p>这个函数会将结果直接进行输出（注意：是直接输出区别于返回值），<strong>命令成功后返回输出的最后一行</strong>，失败返回FALSE。</p><ol start="2"><li>shell_exec()：</li></ol><p>shell_exec通过shell环境执行命令（<strong>这就意味着这个方法只能在liunx或mac os的shell环境中使用</strong>），并且完整的输出以字符串的方式返回。如果执行过程中发生错误或者进程不产生输出，则返回NULL。</p><ol start="3"><li>exec():</li></ol><p>exec执行一个外部程序</p><p>返回命令执行结果最后一行的内容。不显示回显。如果想要获取命令的输出内容，请确保使用output参数，或者利用这个函数来构建反弹shell。</p><ol start="4"><li>passthru():</li></ol><p>passthru 执行外部程序并且显示原始输出</p><ol start="5"><li>反引号</li></ol><p>反引号可以用来在php代码中直接执行系统命令，但是想要回显的话还需要一个echo：</p><ol start="6"><li>花括号</li></ol><p>{command，}</p><ol start="7"><li>echo命令</li></ol><h2 id="PHP代码执行函数"><a href="#PHP代码执行函数" class="headerlink" title="PHP代码执行函数"></a>PHP代码执行函数</h2><p>代码执行漏洞与命令执行漏洞具有相通性。</p><p>利用系统函数实现命令执行，在php下，允许命令执行的函数有：</p><p>eval（），assert（），preg_replace()、**${}**等</p><p>${}执行代码（在双引号中倘若有${}出现，那么{}内的内容将被当作php代码块来执行。）</p><h2 id="实战过滤"><a href="#实战过滤" class="headerlink" title="实战过滤"></a>实战过滤</h2><ol><li>遇到运算符过滤绕过</li></ol><p>%0a换行</p><ol start="2"><li>空格及关键词过滤绕过</li></ol><p>${IFS} 关键词中加入$* 绕过</p><ol start="3"><li>cat过滤</li></ol><p>使用双引号进行绕过</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>hhh</title>
+      <link href="/2021/08/20/hhh/"/>
+      <url>/2021/08/20/hhh/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2021/08/20/hello-world/"/>
+      <url>/2021/08/20/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+  
+  
+</search>
