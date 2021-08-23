@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="sql注入, Hbluewhite的Blog">
+    <meta name="keywords" content="SSRF漏洞, Hbluewhite的Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>sql注入 | Hbluewhite的Blog</title>
+    <title>SSRF漏洞 | Hbluewhite的Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -356,12 +356,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">sql注入</h1>
+                    <h1 class="description center-align post-title">SSRF漏洞</h1>
                 </div>
             </div>
         </div>
@@ -477,8 +477,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Sql/">
-                                <span class="chip bg-color">Sql</span>
+                            <a href="/tags/SSRF/">
+                                <span class="chip bg-color">SSRF</span>
                             </a>
                         
                     </div>
@@ -493,7 +493,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-08-22
+                    2021-08-23
                 </div>
                 
 
@@ -514,52 +514,65 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="sql注入"><a href="#sql注入" class="headerlink" title="sql注入"></a>sql注入</h1><p><strong>原理</strong>：所谓sql注入就是通过把sql命令插入到web表单提交或输入域名或页面请求的拆线呢字符串，最终达到欺骗服务器执行指定的sql语句。具体来说，它是利用现有的应用程序，将sql语句注入到后台数据库引擎执行的能力，它可以通过在Web表单上输入sql语句得到一个存在的安全漏洞的网站上的数据，而不是按照设计者意图在执行sql语句</p>
-<p>一、 sql注入漏洞的原理：sql注入攻击指的是通过构建特殊的输入作为参数传入web应用程序，而这些输入大都是sql语法里的一些组合，通过执行sql语句进而执行攻击者所要的操作，其主要原因就是程序根据相关技术原理，sql注入可以分为平台层注入和代码层注入。前者由于不安全的数据库配置或者数据库平台的漏洞所致；后者主要是由于程序员对输入未进行戏指地过滤，从而执行了非法的数据查询。基于此，sql注入的产生原因通常表现在以下几方面：</p>
-<ol>
-<li>不合理的查询集处理</li>
-<li>不当的错误处理</li>
-<li>转义字符处理不合适</li>
-<li>多个提交处理不当</li>
+                <h1 id="SSRF漏洞"><a href="#SSRF漏洞" class="headerlink" title="SSRF漏洞"></a>SSRF漏洞</h1><h2 id="漏洞概述"><a href="#漏洞概述" class="headerlink" title="漏洞概述"></a>漏洞概述</h2><p>服务端请求伪造（Server-Side Request Forgery），是指Web服务提供从用户指定的URL读取数据并展示功能又未对用户输入的URL进行过滤，导致攻击者可借助服务端实现访问基本无权访问的URLWeblogic中存在一个SSRF漏洞，利用该漏洞可以发送任意HTTP请求，进而攻击内网中redis，fastcgi等脆弱组件。</p>
+<h2 id="漏洞产生的原因："><a href="#漏洞产生的原因：" class="headerlink" title="漏洞产生的原因："></a>漏洞产生的原因：</h2><p>大都是由于服务端提供了从其他服务器应用获取数据的功能，但又没有对目标地址做严格过滤与限制，导致攻击者可以传入任意的地址来让后端服务器发起请求，并返回对该目标地址请求的数据。</p>
+<h3 id="数据流："><a href="#数据流：" class="headerlink" title="数据流："></a>数据流：</h3><p>攻击者—-&gt;服务器—-&gt;目标地址</p>
+<p>根据后台使用的函数的不同，对应的影响和利用方法又有不一样。</p>
+<h3 id="php中下面的函数使用不当会导致SSRF："><a href="#php中下面的函数使用不当会导致SSRF：" class="headerlink" title="php中下面的函数使用不当会导致SSRF："></a>php中下面的函数使用不当会导致SSRF：</h3><ol>
+<li><code>file_get_contents()</code>这段代码使用file_get_contents函数从用户指定的url获取图片，然后把它用一个随机文件名保存在硬盘上，并展示给用户。</li>
 </ol>
-<p>二、sql注入漏洞的方法</p>
-<ol>
-<li>数字注入：</li>
-</ol>
-<p>在浏览器地址中输入：?id=1，这是一个get型的接口，发送这个请求相当于调用一个查询语句：</p>
-<p><code>select * from arrticle where id =&quot;$id&quot;</code></p>
-<p>正常情况下，应该返回一个id=1的文章。那么，如果在浏览器地址栏中输入?id=-1or1=1，这就是一个sql注入攻击了，可能会返回所有文章的信息。</p>
-<p>这是因为，id=-1永远为false，而1=1永远是true，根据or语句，那么where的语句的条件想到与没有，那么查询的结果相当于整张表格的内容。</p>
-<p>2.字符串注入</p>
-<p>有这样一个用户登陆的场景:登陆界面包括用户名和密码输入框，以及提交按钮。输入用户名和密码，提交。</p>
-<p>这是一个post的请求，登陆时调用接口learn.me/sql/login.html,首先连接数据库，然后在后台请求用户名和密码参数校验，即是一个sql的查询过程。假设正确的用户名和密码user和pwd123，输入正确的用户名和密码、提交。相当于调用了以下的sql语句。</p>
-<p><code>SELECT *FROM user HERE username =&#39;user&#39; AND password =&#39;pwd123&#39;</code></p>
-<p>由于用户名和密码都是字符串，sql注入方法既是参数携带的数据编程mysql中注释的字符串。mysql中有2种注释的方法</p>
-<ul>
-<li>‘#’：在这之后的所有字符串都会呗当成注释处理，用户名输入user’#密码任意输入，这样提交相当于</li>
-</ul>
-<p><code>SELECT * FROM suer WHERE username=&#39;username&#39;#&#39; AND password=&#39;&#39;</code></p>
-<p>后面相当于注释掉了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">	if (isset($_POST[&#x27;url&#x27;])) </span><br><span class="line">	&#123; </span><br><span class="line">		$content = file_get_contents($_POST[&#x27;url&#x27;]);</span><br><span class="line">    	$filename =&#x27;./images/&#x27;.rand().&#x27;;img1.jpg&#x27;;</span><br><span class="line">    	file_put_contents($filename, $content); </span><br><span class="line">    	echo $_POST[&#x27;url&#x27;]; </span><br><span class="line">    	$img = &quot;&lt;img src=\&quot;&quot;.$filename.&quot;\&quot;/&gt;&quot;; </span><br><span class="line">    &#125;</span><br><span class="line">    echo $img;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
 <ol start="2">
-<li>‘__’后面的字符串也会被当成注释来处理</li>
+<li><code>fsockopen()</code>这段代码使用fsockopen函数实现获取用户制定URL的数据（文件或者HTML），这个函数会使用socket跟服务器建立TCP连接，传输原始数据。</li>
 </ol>
-<h2 id="当我们遇到sql题目的时候的处理方法"><a href="#当我们遇到sql题目的时候的处理方法" class="headerlink" title="当我们遇到sql题目的时候的处理方法"></a>当我们遇到sql题目的时候的处理方法</h2><ol>
-<li>首先先输入<code>‘ </code>进行判断是否有注入点，也可and 1=1 and 1=2   </li>
-<li>爆破当前的数据库名：通常先用order by使用order by 语法，确定字段数。这个语句的意思是按照第n列排序，若order by 8正常，order by 9报错的话就表示原查询语句查询结果为9列。</li>
-</ol>
-<p><code>union select 1,2,database()#</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">	function GetFile($host,$port,$link) </span><br><span class="line">	&#123; </span><br><span class="line">		$fp = fsockopen($host, intval($port), $errno, $errstr, 30); </span><br><span class="line">		if (!$fp) </span><br><span class="line">		&#123; </span><br><span class="line">			echo &quot;$errstr (error number $errno) \n&quot;; </span><br><span class="line">		&#125; </span><br><span class="line">		else </span><br><span class="line">		&#123; </span><br><span class="line">			$out = &quot;GET $link HTTP/1.1\r\n&quot;; </span><br><span class="line">			$out .= &quot;Host: $host\r\n&quot;; $out .= &quot;Connection: Close\r\n\r\n&quot;; </span><br><span class="line">			$out .= &quot;\r\n&quot;; fwrite($fp, $out); $contents=&#x27;&#x27;; </span><br><span class="line">			while (!feof($fp)) </span><br><span class="line">			&#123; </span><br><span class="line">				$contents.= fgets($fp, 1024); </span><br><span class="line">			&#125; </span><br><span class="line">			fclose($fp);</span><br><span class="line">             return $contents; </span><br><span class="line">        &#125; </span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
 <ol start="3">
-<li>按照要求爆破出自己需要的</li>
+<li><code>curl_exec()</code>使用curl获取数据。</li>
 </ol>
-<p><img src="https://images2018.cnblogs.com/blog/1371400/201804/1371400-20180418233926050-609985087.png" alt="img"></p>
-<p>上面为手动注入，下面可以使用工具，sqlmap</p>
-<p>sqlmap主要是语法之间的使用</p>
-<p>对于文件来说 -r 读取文件 -p 确定参数 –current-db 爆破出当前数据库</p>
-<p>常见的 -u 检测是否有注入点</p>
-<p>-d 数据库</p>
-<p>-t 表</p>
-<p>-c 列</p>
-<p>–dump 爆破数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">if (isset($_POST[&#x27;url&#x27;])) </span><br><span class="line">&#123; </span><br><span class="line">	$link = $_POST[&#x27;url&#x27;]; </span><br><span class="line">	$curlobj = curl_init(); </span><br><span class="line">	curl_setopt($curlobj, CURLOPT_POST, 0); </span><br><span class="line">	curl_setopt($curlobj,CURLOPT_URL,$link); </span><br><span class="line">	curl_setopt($curlobj, CURLOPT_RETURNTRANSFER, 1); </span><br><span class="line">	$result=curl_exec($curlobj); </span><br><span class="line">	curl_close($curlobj); </span><br><span class="line">	$filename = &#x27;./curled/&#x27;.rand().&#x27;.txt&#x27;; </span><br><span class="line">	file_put_contents($filename, $result); </span><br><span class="line">	echo $result;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>这个不是函数，是利用SSRF进行端口扫描127.0.0.1:3306根据服务器的返回信息进行判断，大部分应用不会判别端口，可通过返回的banner信息判断端口的状态。</li>
+</ol>
+<p><strong>后端代码</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">if (isset($_POST[&#x27;url&#x27;])) </span><br><span class="line">&#123; </span><br><span class="line">$link = $_POST[&#x27;url&#x27;]; </span><br><span class="line">$filename = &#x27;./curled/&#x27;.rand().&#x27;txt&#x27;; </span><br><span class="line">$curlobj = curl_init($link); </span><br><span class="line">$fp = fopen($filename,&quot;w&quot;); </span><br><span class="line">curl_setopt($curlobj, CURLOPT_FILE, $fp); </span><br><span class="line">curl_setopt($curlobj, CURLOPT_HEADER, 0); </span><br><span class="line">curl_exec($curlobj); curl_close($curlobj); </span><br><span class="line">fclose($fp); </span><br><span class="line">$fp = fopen($filename,&quot;r&quot;);</span><br><span class="line">$result = fread($fp, filesize($filename)); </span><br><span class="line">fclose($fp); </span><br><span class="line">echo $result;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>前端代码</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">form</span> <span class="attr">name</span>=<span class="string">&quot;px&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">action</span>=<span class="string">&quot;http://127.0.0.1/ss.php&quot;</span>&gt;</span> </span><br><span class="line">        	<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;&quot;</span>&gt;</span> </span><br><span class="line">        	<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">name</span>=<span class="string">&quot;commit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;submit&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">form</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>请求非HTTP的端口可以返回banner信息。或可利用302跳转进行绕HTTP协议的限制。</p>
+<p><strong>辅助脚本</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$ip = $_GET[&#x27;ip&#x27;];</span><br><span class="line">$port = $_GET[&#x27;port&#x27;];</span><br><span class="line">$scheme = $_GET[&#x27;s&#x27;];</span><br><span class="line">$data = $_GET[&#x27;data&#x27;];</span><br><span class="line">header(&quot;Location: $scheme://$ip:$port/$data&quot;);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果一定要通过后台服务器远程去对用户指定（“或者预埋在前端的请求”）的地址进行资源请求，则请做好目标地址的过滤。</p>
+<h2 id="SSRF的漏洞攻击利用"><a href="#SSRF的漏洞攻击利用" class="headerlink" title="SSRF的漏洞攻击利用"></a>SSRF的漏洞攻击利用</h2><ol>
+<li>可以对外网、服务器所在内网、本地进行端口扫描，获取一些服务端banner信息。（banner信息中可以获取到软件开发商、软件名称、服务类型、版本号等）</li>
+<li>攻击运行在内网或本地的应用程序（比如溢出）。</li>
+<li>对内网Web应用进行指纹识别，通过访问默认文件实现。</li>
+<li>攻击内外网的web应用，主要是使用get参数就可以实现的攻击。</li>
+<li>利用file协议读取本地文件等。</li>
+</ol>
+<h2 id="SSRF绕过姿势"><a href="#SSRF绕过姿势" class="headerlink" title="SSRF绕过姿势"></a>SSRF绕过姿势</h2><ol>
+<li><p><strong>更改IP地址写法。</strong>例如：192.168.0.18进制格式0300.0250.0.116进制格式：0xC0.0xA8.0.110 进制整数格式：323223552116 进制整数格式：0xC0A80001，还有一种特殊的省略模式，例如10.0.0.1这个 IP 可以写成10.12。</p>
+</li>
+<li><p><strong>利用 URL 解析问题</strong> 在某些情况下，后端程序可能会对访问的 URL 进行解析，对解析出来的 host 地址进行过滤。这时候可能会出现对 URL 参数解析不当，导致可以绕过过滤。</p>
+<p>例如：<a target="_blank" rel="noopener" href="http://www.baidu.com@192.168.0.1/%E4%B8%8Ehttp://192.168.0.1%E8%AF%B7%E6%B1%82%E7%9A%84%E9%83%BD%E6%98%AF192.168.0.1%E5%86%85%E5%AE%B9%E5%8F%AF%E4%BB%A5%E6%8C%87%E5%90%91%E4%BB%BB%E6%84%8F">http://www.baidu.com@192.168.0.1/与http://192.168.0.1请求的都是192.168.0.1内容可以指向任意</a> ip 的域名xip.io：<a target="_blank" rel="noopener" href="http://127.0.0.1.xip.io/==&gt;http://127.0.0.1/%E7%9F%AD%E5%9C%B0%E5%9D%80http://dwz.cn/11SMa==&gt;http://127.0.0.1%E5%88%A9%E7%94%A8%E5%8F%A5%E5%8F%B7%E3%80%82%EF%BC%9A127%E3%80%820%E3%80%820%E3%80%821==&gt;127.0.0.1%E5%88%A9%E7%94%A8">http://127.0.0.1.xip.io/==&gt;http://127.0.0.1/短地址http://dwz.cn/11SMa==&gt;http://127.0.0.1利用句号。：127。0。0。1==&gt;127.0.0.1利用</a> Enclosed alphanumerics</p>
+</li>
+</ol>
+<h2 id="SSRF漏洞防御"><a href="#SSRF漏洞防御" class="headerlink" title="SSRF漏洞防御"></a>SSRF漏洞防御</h2><ol>
+<li>开启OpenSSL无法进行交互利用服务端需要鉴权不能完美利用限制请求的端口为http常用端口，比如，80,443,8080,8090.</li>
+<li>禁用不需要的协议。</li>
+<li>仅仅允许http和https请求。可以防止类似于 file://,gopher://,ftp:// 等引起的问题。</li>
+<li>统一错误信息，避免用户可以根据错误信息来判断远端服务器的端口状态。</li>
+</ol>
 
                 
             </div>
@@ -586,7 +599,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/08/22/sql%E6%B3%A8%E5%85%A5/">http://example.com/2021/08/22/sql%E6%B3%A8%E5%85%A5/</a>
+                    <a href="http://example.com/2021/08/23/SSRF%E6%BC%8F%E6%B4%9E/">http://example.com/2021/08/23/SSRF%E6%BC%8F%E6%B4%9E/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -624,8 +637,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Sql/">
-                                    <span class="chip bg-color">Sql</span>
+                                <a href="/tags/SSRF/">
+                                    <span class="chip bg-color">SSRF</span>
                                 </a>
                             
                         </div>
@@ -1063,9 +1076,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/08/23/SSRF%E6%BC%8F%E6%B4%9E/">
                     <div class="card-image">
@@ -1083,9 +1097,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-08-23
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-23
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -1094,6 +1108,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1112,13 +1127,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/08/22/RCE/">
+                <a href="/2021/08/22/sql%E6%B3%A8%E5%85%A5/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/11.png" class="responsive-img" alt="RCE">
+                        <img src="/medias/featureimages/8.png" class="responsive-img" alt="sql注入">
                         
-                        <span class="card-title">RCE</span>
+                        <span class="card-title">sql注入</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1142,8 +1157,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Web-bug/">
-                        <span class="chip bg-color">Web bug</span>
+                    <a href="/tags/Sql/">
+                        <span class="chip bg-color">Sql</span>
                     </a>
                     
                 </div>
