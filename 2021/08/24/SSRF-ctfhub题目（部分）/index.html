@@ -516,9 +516,9 @@
             <div id="articleContent">
                 <h1 id="CTFHUB-SSRF题目"><a href="#CTFHUB-SSRF题目" class="headerlink" title="CTFHUB SSRF题目"></a>CTFHUB SSRF题目</h1><h2 id="内网访问"><a href="#内网访问" class="headerlink" title="内网访问"></a>内网访问</h2><p><strong>考点</strong>：SSRF远程访问主机中的文件</p>
 <p>进入题目之后是这样的无显示。</p>
-<p><img src="/2021/08/24/SSRF-ctfhub%E9%A2%98%E7%9B%AE%EF%BC%88%E9%83%A8%E5%88%86%EF%BC%89/Users\86182\myBlog\source_posts\SSRF-ctfhub题目（部分）\1.png" alt="blockchian"></p>
+<p><img src="/2021/08/24/SSRF-ctfhub%E9%A2%98%E7%9B%AE%EF%BC%88%E9%83%A8%E5%88%86%EF%BC%89/1.png"></p>
 <p>然后我们根据题目提示，说访问127.0.0.1的flag.php文件，我们注意看url栏在<strong>url栏</strong>后面是空白的，然后我们就添加127.0.0.1/flag.php，然后访问，就得到flag了。</p>
-<p><img src="/2021/08/24/SSRF-ctfhub%E9%A2%98%E7%9B%AE%EF%BC%88%E9%83%A8%E5%88%86%EF%BC%89/Users\86182\myBlog\source_posts\SSRF-ctfhub题目（部分）\2.png" alt="blockchian"></p>
+<p><img src="/2021/08/24/SSRF-ctfhub%E9%A2%98%E7%9B%AE%EF%BC%88%E9%83%A8%E5%88%86%EF%BC%89/2.png"></p>
 <h2 id="伪协议读取文件"><a href="#伪协议读取文件" class="headerlink" title="伪协议读取文件"></a>伪协议读取文件</h2><p><strong>考点</strong>：伪协议读取本地的文件</p>
 <ol>
 <li>首先我们要知道在ssrf中常用的伪协议有哪些？比如file:///、dict://、sftp://…</li>
@@ -526,14 +526,14 @@
 </ol>
 <p>这样我们进入题目进入题目之后也是这样的无显示，并且url栏是空着的，这个时候我们就可以添加上面的东西这样添加</p>
 <p><code>?url=file:///var/www/html/flag.php</code></p>
-<p><img src="/2021/08/24/SSRF-ctfhub%E9%A2%98%E7%9B%AE%EF%BC%88%E9%83%A8%E5%88%86%EF%BC%89/Users\86182\myBlog\source_posts\SSRF-ctfhub题目（部分）\3.png" alt="blockchain"></p>
+<p><img src="/2021/08/24/SSRF-ctfhub%E9%A2%98%E7%9B%AE%EF%BC%88%E9%83%A8%E5%88%86%EF%BC%89/3.png"></p>
 <p><strong>题后总结</strong>：我们要知道file:///可以冲文件系统中获取文件。</p>
 <h2 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h2><p><strong>考点</strong>：主要考dict：//伪协议的使用</p>
 <p>进入题目之后我们可以看到也是一个无显示的网页，url需要填写，这里我们根据提示，访问端口在8000-9000，然后我们就用这样填写url</p>
 <p><code>?url=dict://127.0.0.1:8000</code></p>
 <p>然后用bp对8000进行数字爆破，爆破数字段from8000to9000 step1</p>
 <p>然后就得到flag了</p>
-<p><img src="/2021/08/24/SSRF-ctfhub%E9%A2%98%E7%9B%AE%EF%BC%88%E9%83%A8%E5%88%86%EF%BC%89/Users\86182\myBlog\source_posts\SSRF-ctfhub题目（部分）\4.png" alt="blockchain"></p>
+<p><img src="/2021/08/24/SSRF-ctfhub%E9%A2%98%E7%9B%AE%EF%BC%88%E9%83%A8%E5%88%86%EF%BC%89/4.png"></p>
 
                 
             </div>
