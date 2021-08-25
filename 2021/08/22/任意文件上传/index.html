@@ -582,7 +582,7 @@
 <p>此时如果我们要上传php的一句话<code>&lt;?php@eval($_POST[&#39;shell&#39;]);?&gt;</code>时，php的标记语言中的？会被替换为！，这样一句话就不能被执行了</p>
 <p>绕过方法：</p>
 <p>主要还是要根据实际过滤字符来进行判断，如果写死的话可能是没办法的（一般不会，因为还要兼顾图片上传）</p>
-<p>比如过滤问好，我们就可以使用<script language='php'>system('ls');</script>这样的一句话。具体方法要看实际代码过滤了哪些字符。</p>
+<p>比如过滤问好，我们就可以使用<script language="php">system('ls');</script>这样的一句话。具体方法要看实际代码过滤了哪些字符。</p>
 <ol start="2">
 <li>图片二次渲染</li>
 </ol>
@@ -606,7 +606,7 @@
 <p>  .htaccess文件(或者”分布式配置文件”）,全称是Hypertext Access(超文本入口)。提供了针对目录改变配置的方法， 即，在一个特定的文档目录中放置一个包含一个或多个指令的文件， 以作用于此目录及其所有子目录。作为用户，所能使用的命令受到限制。管理员可以通过Apache的AllowOverride指令来设置。</p>
 <p>利用.htaccess的条件：Apache中配置AllowOverride All</p>
 <p>.htaccess文件可以配置将特定的文件按规定的文件类型进行解析，可以用以下两种方式来配置：</p>
-<p>&lt;FilesMatch “test”&gt;<br> SetHandler application/x-httpd-php<br></FilesMatch></p>
+<p>&lt;FilesMatch “test”&gt;<br> SetHandler application/x-httpd-php<br></p>
 <p>这一种采用正则匹配，只要文件名为test的文件都将被作为php文件解析</p>
 <p>AddType application/x-httpd-php .jpg</p>
 <p>第二种是将.jpg文件都作为php文件解析</p>
