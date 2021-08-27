@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Gopher协议深度理解, Hbluewhite的Blog">
+    <meta name="keywords" content="curl, Hbluewhite的Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Gopher协议深度理解 | Hbluewhite的Blog</title>
+    <title>curl | Hbluewhite的Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -356,12 +356,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Gopher协议深度理解</h1>
+                    <h1 class="description center-align post-title">curl</h1>
                 </div>
             </div>
         </div>
@@ -477,8 +477,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/SSRF/">
-                                <span class="chip bg-color">SSRF</span>
+                            <a href="/tags/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+                                <span class="chip bg-color">常用命令</span>
                             </a>
                         
                     </div>
@@ -493,7 +493,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-08-25
+                    2021-08-27
                 </div>
                 
 
@@ -514,71 +514,56 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Gopher协议的深度理解"><a href="#Gopher协议的深度理解" class="headerlink" title="Gopher协议的深度理解"></a>Gopher协议的深度理解</h1><h2 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h2><p>Gopher是Internet上一个非常有名的信息查找系统，它将Internet上的文件组织成某种索引，很方便地将用户从Internet的一处带到另一处。在WWW出现之前，Gopher是Internet上最主要的信息检索工具，Gopher站点也是最主要的站点，使用tcp70端口。但在WWW出现后，Gopher失去了昔日的辉煌。现在它基本过时，人们很少再使用它；</p>
-<p><strong>gopher协议支持发出GET、POST请求：可以先截获get请求包和post请求包，在构成符合gopher协议的请求。gopher协议是ssrf利用中最强大的协议</strong></p>
-<h2 id="限制"><a href="#限制" class="headerlink" title="限制:"></a>限制:</h2><p><img src="https://pic2.zhimg.com/80/v2-ea9bb9538044933ac3c918d5a56f2d69_720w.png" alt="img"></p>
-<h2 id="Gopher协议格式："><a href="#Gopher协议格式：" class="headerlink" title="Gopher协议格式："></a>Gopher协议格式：</h2><p><code>URL:gopher://&lt;host&gt;:&lt;port&gt;/&lt;gopher-path&gt;_后接TCP数据流</code></p>
-<ul>
-<li>gopher的默认端口是70</li>
-<li>如果发起post请求，回车换行需要使用%0d%0a，如果多个参数，参数之间&amp;也需要进行编码</li>
-</ul>
-<p><strong>Gopher发送请求HTTP GET请求：</strong></p>
-<p>使用Gopher协议发送一个请求，环境为：nc起一个监听，curl发送gopher请求</p>
-<p>nc启动监听，监听2333端口：nc -lp 2333</p>
-<p>使用curl发送http请求，命令为</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">margine:~ margin$ curl gopher:<span class="comment">//192.168.0.119:2333/abcd</span></span><br></pre></td></tr></table></figure>
+                <h1 id="curl使用"><a href="#curl使用" class="headerlink" title="curl使用"></a>curl使用</h1><p>curl是一个命令行工具，通过制定的URL来上传或下载数据，并将数据展示出来。curl中的c表示client，而URL就是url。</p>
+<h2 id="命令行基础"><a href="#命令行基础" class="headerlink" title="命令行基础"></a>命令行基础</h2><h2 id="Verbose模式"><a href="#Verbose模式" class="headerlink" title="Verbose模式"></a>Verbose模式</h2><p>如果curl得到的结果不是期望的结果，我们可以使用<code>-v</code>或<code>--verbose</code>进入Verbose模式获取更多的信息。</p>
+<ol>
+<li>查看通信过程</li>
+</ol>
+<p>在Verbose模式中，curl会得到更多的对话式信息，帮助我们了解发生了什么。curl会在每一个信息前面加上*进行标识。在下面的例子中，我们将百度的首页保存下来（使用<code>-o</code>选项并指定参数<code>baidu</code>）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -v www.baidu.com -o baidu</span><br></pre></td></tr></table></figure>
 
-<p>此时nc收到的消息为：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">margine:~ margin$ nc -lp 2333</span><br><span class="line">bcd</span><br></pre></td></tr></table></figure>
+<p>我们就可以得到如下信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">* About to connect() to www.baidu.com port 80 (#0)</span><br><span class="line">*   Trying 14.215.177.39... connected</span><br><span class="line">* Connected to www.baidu.com (14.215.177.39) port 80 (#0)</span><br><span class="line">&gt; GET / HTTP/1.1</span><br><span class="line">&gt; User-Agent: curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.27.1 zlib/1.2.3 libidn/1.18 libssh2/1.4.2</span><br><span class="line">&gt; Host: www.baidu.com</span><br><span class="line">&gt; Accept: */*</span><br><span class="line">&gt;</span><br><span class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0&lt; HTTP/1.1 200 OK</span><br><span class="line">&lt; Accept-Ranges: bytes</span><br><span class="line">&lt; Cache-Control: private, no-cache, no-store, proxy-revalidate, no-transform</span><br><span class="line">&lt; Connection: Keep-Alive</span><br><span class="line">&lt; Content-Length: 2381</span><br><span class="line">&lt; Content-Type: text/html</span><br><span class="line">&lt; Date: Fri, 14 Sep 2018 09:55:18 GMT</span><br><span class="line">&lt; Etag: &quot;588604dd-94d&quot;</span><br><span class="line">&lt; Last-Modified: Mon, 23 Jan 2017 13:27:57 GMT</span><br><span class="line">&lt; Pragma: no-cache</span><br><span class="line">&lt; Server: bfe/1.0.8.18</span><br><span class="line">&lt; Set-Cookie: BDORZ=27315; max-age=86400; domain=.baidu.com; path=/</span><br><span class="line">&lt;</span><br><span class="line">&#123; [data not shown]</span><br><span class="line">103  2381  103  2381    0     0   113k      0 --:--:-- --:--:-- --:--:--  232k* Connection #0 to host www.baidu.com left intact</span><br><span class="line"></span><br><span class="line">* Closing connection #0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>可以发现url中的a没有被nc接受到，如果命令变为</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">margine:~ margin$ curl gopher://192.168.0.119:2333/_abcd</span><br></pre></td></tr></table></figure>
+<h2 id="Header"><a href="#Header" class="headerlink" title="Header"></a>Header</h2><p>在curl中，在使用<code>-i</code>选项可以显示Response的Header信息，连同Body数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -i www.baidu.com</span><br></pre></td></tr></table></figure>
 
-<p>此时nc收到的消息为：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">margine:~ margin$ nc -lp 2333</span><br><span class="line">abcd</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Accept-Ranges: bytes</span><br><span class="line">Cache-Control: private, no-cache, no-store, proxy-revalidate, no-transform</span><br><span class="line">Connection: Keep-Alive</span><br><span class="line">Content-Length: 2381</span><br><span class="line">Content-Type: text/html</span><br><span class="line">Date: Mon, 17 Sep 2018 10:26:42 GMT</span><br><span class="line">Etag: &quot;588604dd-94d&quot;</span><br><span class="line">Last-Modified: Mon, 23 Jan 2017 13:27:57 GMT</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Server: bfe/1.0.8.18</span><br><span class="line">Set-Cookie: BDORZ=27315; max-age=86400; domain=.baidu.com; path=/</span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;!--STATUS OK--&gt;&lt;html&gt; &lt;head&gt;&lt;meta http-equiv=content-type content=text/html;charset=utf-8&gt;&lt;meta</span><br><span class="line">http-equiv=X-UA-Compatible content=IE=Edge&gt;&lt;meta content=always name=referrer&gt;&lt;link rel=styleshee</span><br><span class="line">t type=text/css href=http://s1.bdstatic.com/r/www/cache/bdorz/baidu.min.css&gt;&lt;title&gt;百度一下，你就</span><br><span class="line">知道&lt;/title&gt;&lt;/head&gt; &lt;body link=#0000cc&gt; ... &lt;/body&gt; &lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>所以需要在使用gopher协议时在url后加入一个字符（该字符可随意写）</p>
-<p>那么如何发送HTTP的请求呢？例如GET请求。此时我们联想到，直接发送一个原始的HTTP包不就可以吗？在gopher协议中发送HTTP的数据，需要以下三步：</p>
-<blockquote>
-<p>1、构造HTTP数据包<br>2、URL编码、替换回车换行为%0d%0a<br>3、发送gopher协议</p>
-</blockquote>
-<p>我准备了一个PHP的代码，如下：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;Hello &quot;</span>.<span class="variable">$_GET</span>[<span class="string">&quot;name&quot;</span>].<span class="string">&quot;\n&quot;</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>使用<code>-I</code>选项可以只显示Response的Header信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -I www.baidu.com</span><br></pre></td></tr></table></figure>
 
-<p>一个GET型的HTTP包，如下：</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/ssrf/base/get.php?name=Margin</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>192.168.0.109</span><br></pre></td></tr></table></figure>
+<h2 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h2><p><code>POST</code>是HTTP中向服务端提交数据的一种方法。在浏览器中，但在表单中填写完数据后，浏览器就会默认将填写的数据使用<code>key=value</code>串的形式进行转化。在curl中，我们可以使用<code>-d</code>或<code>--data</code>选项来指定具体的数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl -d key1=value1&amp;key2=value2 http://example.com</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>URL编码后为：</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl gopher://192.168.0.109:80/_GET%20/ssrf/base/get.php%3fname=Margin%20HTTP/1.1%0d%0AHost:%20192.168.0.109%0d%0A</span><br></pre></td></tr></table></figure>
+<p>我们也可以使用多个<code>-d</code>选项来指定多组数据，curl会自动把这些数据连接起来，因此上面的例子还可以这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl -d key1=value1 -d key2=value2 http://example.com</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>在转换为URL编码时候有这么几个坑</p>
-<blockquote>
-<p>1、问号（？）需要转码为URL编码，也就是%3f<br>2、回车换行要变为%0d%0a,但如果直接用工具转，可能只会有%0a<br>3、在HTTP包的最后要加%0d%0a，代表消息结束（具体可研究HTTP包结束）</p>
-</blockquote>
-<p><strong>Gopher发送请求HTTP POST请求：</strong></p>
-<p>发送POST请求前，先看下POST数据包的格式</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">POST /ssrf/base/post.php HTTP/1.1</span><br><span class="line">host:192.168.0.109</span><br><span class="line"></span><br><span class="line">name=Margin</span><br></pre></td></tr></table></figure>
+<h2 id="请求方法"><a href="#请求方法" class="headerlink" title="请求方法"></a>请求方法</h2><p>在***HTTP方法***中我们可以通过具体的选项指定使用什么方法。这里我们也可以使用<code>-X</code>选项来进行指定：</p>
+<p>Curl执行GET/POST/PUT/DELETE操作 hou</p>
+<p>-X后跟指定的命令参数去执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST http://example.com</span><br><span class="line">curl -X PUT www.baidu.com </span><br><span class="line"></span><br><span class="line">curl -X DELETE www.baidu.com</span><br><span class="line"></span><br><span class="line">curl -X POST www.baidu.com </span><br><span class="line"></span><br><span class="line">curl -X GET www.baidu.com</span><br></pre></td></tr></table></figure>
 
-<p>那我们将上面的POST数据包进行URL编码并改为gopher协议</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl gopher://192.168.0.109:80/_POST%20/ssrf/base/post.php%20HTTP/1.1%0d%0AHost:192.168.0.1090d%0A%0d%0Aname=Margin%0d%0A</span><br></pre></td></tr></table></figure>
+<h2 id="COOKies"><a href="#COOKies" class="headerlink" title="COOKies"></a>COOKies</h2><p>HTTP是一种无状态的协议，为了在会话中保存一些状态，可以使用Cookies。服务器通过<code>Set-Cookie:</code>来设置Cookie，客户端就可以在下一次请求中携带这些数据。</p>
+<h3 id="1-设置Cookie"><a href="#1-设置Cookie" class="headerlink" title="1. 设置Cookie"></a>1. 设置Cookie</h3><p>我们可以使用<code>--cookie</code>选项来设置一个Cookie：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl --cookie &quot;CookieName=CookieValue&quot; http://example.com</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>post.php的代码为</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    echo &quot;Hello &quot;.$_POST[&quot;name&quot;].&quot;\n&quot;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="2-从文件中读取Cookies"><a href="#2-从文件中读取Cookies" class="headerlink" title="2. 从文件中读取Cookies"></a>2. 从文件中读取Cookies</h3><p>curl默认不会记住服务器设置的Cookie，也不会在下一次请求中携带Cookie。除非用户通过选项自己设置。</p>
+<p>我们可以把之前的Cookies保存到一个文件，然后在下一次请求中指定curl读取文件中的Cookies：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl -b cookies.txt http://example.com</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>使用curl发起gopher的POST请求后，结果为：</p>
-<p><img src="https://pic2.zhimg.com/80/v2-2a42359e724822587a8f7026b9481d61_720w.jpg" alt="img"></p>
-<p>根据上图发现返回的包爆了501的错误，我的思路是这样的：查看Apache的正常日志和错误日志、查找POST请求中所需的字段。下面分别是正常日志和错误日志的截图：</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">192.168.0.119 - - [07/Mar/2020:15:19:49 +0800] &quot;POST /ssrf/base/post.php HTTP/1.1&quot; 200 7</span><br><span class="line">192.168.0.119 - - [07/Mar/2020:15:19:49 +0800] &quot;name=Margin&quot; 501 213</span><br><span class="line">[Sat Mar 07 15:38:50 2020] [error] [client 192.168.0.119] Invalid method in request name=Margin</span><br></pre></td></tr></table></figure>
+<p><code>-b</code>选项指定curl去给定的文件中读取Cookies。</p>
+<p>不过要主要，这里仅仅是读取Cookies，如果这次请求中服务器修改了Cookie，那么curl是不会进行保存的，除非我们手动指定。</p>
+<h3 id="3-写Cookies到文件"><a href="#3-写Cookies到文件" class="headerlink" title="3. 写Cookies到文件"></a>3. 写Cookies到文件</h3><p>我们可以使用<code>-c</code>选项指定curl保存这次请求中服务器设置的Cookies：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl -c cookie.jar.txt http://example.com</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>这里有个疑问：为什么发起了2次请求？为什么会把参数name=Margin当作一个请求？这个地方我调试了很久，发现问题出现在POST请求头中，我之前发POST请求都是直接用脚本，但从来没考虑过哪些参数是POST请求必须的，经过排查，发现有4个参数为必要参数（四个参数的含义不再赘述）：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST /ssrf/base/post.php HTTP/1.1</span><br><span class="line">host:192.168.0.109</span><br><span class="line">Content-Type:application/x-www-form-urlencoded</span><br><span class="line">Content-Length:11</span><br><span class="line"></span><br><span class="line">name=Margin</span><br></pre></td></tr></table></figure>
+<p>有时，我们既需要从文件中读取Cookies，也需要保存服务器设置的Cookies。那么就可以同时使用<code>-b</code>和<code>-c</code>选项：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl -b cookies.txt -c cookie.jar.txt http://example.com</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>现在我们将它进行URL编码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl gopher://192.168.0.109:80/_POST%20/ssrf/base/post.php%20HTTP/1.1%0d%0AHost:192.168.0.109%0d%0AContent-Type:application/x-www-form-urlencoded%0d%0AContent-Length:11%0d%0A%0d%0Aname=Margin%0d%0A</span><br></pre></td></tr></table></figure>
+<h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><p><code>curl</code>支持文件上传，上传文件时使用<code>-T</code>或<code>--upload-file</code>参数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl -T ./index.html www.uploadhttp.com/receive.cgi</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>再次发送请求的结果为：</p>
-<p><img src="https://pic4.zhimg.com/80/v2-571b29ad1c7922b652a783160e5a8d77_720w.jpg" alt="img"></p>
-<p>发现请求正常，OK，那我们现在就介绍完了gopher协议的GET和POST请求。</p>
 
                 
             </div>
@@ -605,7 +590,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/08/25/Gopher%E5%8D%8F%E8%AE%AE%E6%B7%B1%E5%BA%A6%E7%90%86%E8%A7%A3/">http://example.com/2021/08/25/Gopher%E5%8D%8F%E8%AE%AE%E6%B7%B1%E5%BA%A6%E7%90%86%E8%A7%A3/</a>
+                    <a href="http://example.com/2021/08/27/curl/">http://example.com/2021/08/27/curl/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -643,8 +628,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/SSRF/">
-                                    <span class="chip bg-color">SSRF</span>
+                                <a href="/tags/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+                                    <span class="chip bg-color">常用命令</span>
                                 </a>
                             
                         </div>
@@ -1082,9 +1067,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/08/27/curl/">
                     <div class="card-image">
@@ -1102,9 +1088,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-08-27
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-27
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -1113,6 +1099,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1131,13 +1118,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/08/25/SSRF%E9%A2%98%E7%9B%AE%E9%83%A8%E5%88%86/">
+                <a href="/2021/08/25/Gopher%E5%8D%8F%E8%AE%AE%E6%B7%B1%E5%BA%A6%E7%90%86%E8%A7%A3/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/18.png" class="responsive-img" alt="SSRF题目部分">
+                        <img src="/medias/featureimages/14.png" class="responsive-img" alt="Gopher协议深度理解">
                         
-                        <span class="card-title">SSRF题目部分</span>
+                        <span class="card-title">Gopher协议深度理解</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
