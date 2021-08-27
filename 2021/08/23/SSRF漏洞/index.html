@@ -516,6 +516,12 @@
             <div id="articleContent">
                 <h1 id="SSRF漏洞"><a href="#SSRF漏洞" class="headerlink" title="SSRF漏洞"></a>SSRF漏洞</h1><h2 id="漏洞概述"><a href="#漏洞概述" class="headerlink" title="漏洞概述"></a>漏洞概述</h2><p>服务端请求伪造（Server-Side Request Forgery），是指Web服务提供从用户指定的URL读取数据并展示功能又未对用户输入的URL进行过滤，导致攻击者可借助服务端实现访问基本无权访问的URLWeblogic中存在一个SSRF漏洞，利用该漏洞可以发送任意HTTP请求，进而攻击内网中redis，fastcgi等脆弱组件。</p>
 <h2 id="漏洞产生的原因："><a href="#漏洞产生的原因：" class="headerlink" title="漏洞产生的原因："></a>漏洞产生的原因：</h2><p>大都是由于服务端提供了从其他服务器应用获取数据的功能，但又没有对目标地址做严格过滤与限制，导致攻击者可以传入任意的地址来让后端服务器发起请求，并返回对该目标地址请求的数据。</p>
+<h2 id="SSRF漏洞的危害"><a href="#SSRF漏洞的危害" class="headerlink" title="SSRF漏洞的危害"></a>SSRF漏洞的危害</h2><ul>
+<li>对目标服务器所在的内网进行IP存活性扫描和端口扫描</li>
+<li>利用扫描的指纹信息判断开发的服务，从而对内网的主机进行攻击</li>
+<li>识别内网WEB应用指纹，判断应用类型进行攻击</li>
+<li>使用特定协议攻击应用（gopher，dict,flie,FTP/SFTP）</li>
+</ul>
 <h3 id="数据流："><a href="#数据流：" class="headerlink" title="数据流："></a>数据流：</h3><p>攻击者—-&gt;服务器—-&gt;目标地址</p>
 <p>根据后台使用的函数的不同，对应的影响和利用方法又有不一样。</p>
 <h3 id="php中下面的函数使用不当会导致SSRF："><a href="#php中下面的函数使用不当会导致SSRF：" class="headerlink" title="php中下面的函数使用不当会导致SSRF："></a>php中下面的函数使用不当会导致SSRF：</h3><ol>
