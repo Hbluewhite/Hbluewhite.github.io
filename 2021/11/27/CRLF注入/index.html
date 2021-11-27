@@ -475,9 +475,13 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Web-bug/">
+                                <span class="chip bg-color">Web bug</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -510,7 +514,64 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h1 id="CRLF注入攻击与防御"><a href="#CRLF注入攻击与防御" class="headerlink" title="CRLF注入攻击与防御"></a>CRLF注入攻击与防御</h1><p>一、概念：</p>
+<pre><code>    CRLF的概念源自打字机，表明行的结束，转译字符是\r\n，计算机出现后沿用了这个概念。
+
+    CR：回车符的MCS字符，转译字符是\r，ASCII码十进制是13，ASCII码十六进制是0D；
+
+    LF：换行符的MCS字符，转译字符是\n，ASCII码十进制是10，ASCII码十六进制是0A；
+
+    回车符可以让光标移到当前行的开始位置，换行符可以让光标垂直移到下一行。键盘上的回车键（Enter）就可以执行该操作，但不同的操作系统，换行的操作符是不一样的：
+
+    Windows：使用CRLF表示换行；
+
+    Linux/Unix：使用LF表示换行；
+
+    MacOS：早期使用CR表示换行，现在好像也用LF表示换行；
+
+    CRLF注入：HTTP响应报文的结构是：状态行、响应头部和响应包体。在HTTP规范中，换行使用CRLF来表示。其中响应头部中响应头与响应头之间用一个CRLF分隔，响应头部中最后一个响应头和响应包体之间用两个CRLF分隔。
+
+    根据这个分割规律（用一个CRLF分隔的就是不同的响应头，用两个CRLF分隔的就是最后一个响应头和响应包体），如果一个响应头的value中有一个CRLF，那么这个响应头的CRLF之前的内容作为本响应头的value，而CRLF之后的内容则会被作为另一个响应头（或响应包体）处理。如果用户的输入会设置到某响应头中的value，那么通过添加CRLF就可以进行CRLF注入攻击。
+
+    由于攻击者可以通过CRLF注入把恶意代码放在响应包体中输出，所以CRLF注入又称为HTTP响应拆分漏洞（HTTP Response Splitting）。
+</code></pre>
+<p>二、攻击条件：</p>
+<pre><code>    1、能够向响应头注入包含CRLF的恶意代码；
+
+    2、通过一个CRLF分隔成的另一个响应头可以修改用户数据，比如是Set-Cookie；或者通过两个CRLF分隔成的响应包体会直接交给浏览器执行，这样的话都可以逃过XSS过滤，因为这个数据并不是POST传入的，而是服务端通过设置响应头生成的。
+</code></pre>
+<p>三、攻击示例：</p>
+<pre><code>    1、服务端通过设置响应头Location的地址进行跳转，这个地址如果是用户输入的，比如：
+</code></pre>
+<p>Location: $url</p>
+<pre><code>    如果用户输入的是一个url地址：http://www.baidu.com，那么响应头部中会包含响应头：
+</code></pre>
+<p>Location: <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a></p>
+<pre><code>    但如果用户输入的是包含CRLF的注入攻击代码：http://www.baidu.com%0d%0aSet-Cookie:token%3D123456
+</code></pre>
+<p>那么响应头部中会包含响应头：</p>
+<pre><code>Location: www.baidu.com
+Set-Cookie: token = 123456
+
+    可以看到通过一个CRLF注入让服务端给客户端设置了一个名为token的Cookie。
+
+    2、在攻击示例1的基础上，如果浏览器会把服务端返的响应包体内容直接显示时，比如：
+
+&lt;?php
+    echo &#39;Hello &#39; . $response;
+
+    如果用户输入的是一个url地址：http://www.baidu.com%0d%0a%0d%0a&lt;script&gt;alert(&quot;中毒了&quot;)&lt;/script&gt;，那么响应包体的内容是：
+</code></pre>
+<script>alert("中毒了")</script>
+
+<pre><code>    可以看到通过两个CRLF并结合XSS也可以进行攻击，并且这种XSS攻击无法通过XSS的入参过滤解决。因为虽然是XSS攻击，但是是通过CRLF方式注入的。
+</code></pre>
+<p>四、防御措施：</p>
+<pre><code>    1、过滤掉CRLF字符，最好过滤掉所有控制字符（ASCII码十六进制 0x00~0x1F）；
+
+    2、不对用户的输入直接输出；
+</code></pre>
+
                 
             </div>
             <hr/>
@@ -573,7 +634,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/Web-bug/">
+                                    <span class="chip bg-color">Web bug</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -1042,6 +1107,14 @@
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Web-bug/">
+                        <span class="chip bg-color">Web bug</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
