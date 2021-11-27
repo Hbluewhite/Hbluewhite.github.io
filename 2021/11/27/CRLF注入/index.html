@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="hash函数md绕过, Hbluewhite的Blog">
+    <meta name="keywords" content="CRLF注入, Hbluewhite的Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>hash函数md绕过 | Hbluewhite的Blog</title>
+    <title>CRLF注入 | Hbluewhite的Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -356,12 +356,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">hash函数md绕过</h1>
+                    <h1 class="description center-align post-title">CRLF注入</h1>
                 </div>
             </div>
         </div>
@@ -475,13 +475,9 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                    <div class="article-tag">
-                        
-                            <a href="/tags/Md5%E7%BB%95%E8%BF%87/">
-                                <span class="chip bg-color">Md5绕过</span>
-                            </a>
-                        
-                    </div>
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -493,7 +489,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-11-08
+                    2021-11-27
                 </div>
                 
 
@@ -514,23 +510,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="强弱类型比较"><a href="#强弱类型比较" class="headerlink" title="强弱类型比较"></a>强弱类型比较</h1><h2 id="强类型比较"><a href="#强类型比较" class="headerlink" title="强类型比较"></a>强类型比较</h2><p>严格比较就是强类型比较a==b弱类型比较会将a和b转成统一数据类型进行比较，而强类型比较会先判断a和b是不是相同类型，不是则会返回false，是，再比较a和b的值。</p>
-<h2 id="弱类型比较"><a href="#弱类型比较" class="headerlink" title="弱类型比较"></a>弱类型比较</h2><p>松散比较也就是弱类型比较。</p>
-<h1 id="Md5绕过"><a href="#Md5绕过" class="headerlink" title="Md5绕过"></a>Md5绕过</h1><h2 id="1-0e绕过"><a href="#1-0e绕过" class="headerlink" title="1. 0e绕过"></a>1. 0e绕过</h2><p>弱比较会把0exxx当作科学计数法，不管后面的值是什么，都将看为0。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">一些关于md5值以0e开头</span><br><span class="line">QNKCDZO</span><br><span class="line">240610708</span><br><span class="line">s878926199a</span><br><span class="line">s155964671a</span><br><span class="line">s21587387a</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-数组绕过"><a href="#2-数组绕过" class="headerlink" title="2.数组绕过"></a>2.数组绕过</h2><p>md5（）函数计算的是一个字符串的哈希值，对于数组放回则是false</p>
-<p><code>payload:?a[]=1&amp;b[]=2</code></p>
-<h1 id="MD5强类型绕过"><a href="#MD5强类型绕过" class="headerlink" title="MD5强类型绕过"></a>MD5强类型绕过</h1><h2 id="1、"><a href="#1、" class="headerlink" title="1、"></a>1、</h2><p>因为强类型比较，不仅比较值，还比较类型，0e会被当做字符串，所以不能用0e来进行<br>但是我们可以用MD值完全相同的字符来进行绕过</p>
-<h2 id="2、数组绕过"><a href="#2、数组绕过" class="headerlink" title="2、数组绕过"></a>2、数组绕过</h2><p>同上</p>
-<h1 id="特定条件下的MD验证绕过：ffifdyop"><a href="#特定条件下的MD验证绕过：ffifdyop" class="headerlink" title="特定条件下的MD验证绕过：ffifdyop"></a>特定条件下的MD验证绕过：ffifdyop</h1><p>源码</p>
-<p><code>Select * from &#39;admin&#39; whre password=md5()$pass,true)</code></p>
-<p>首先要知道md($pass,true)的含义</p>
-<p><img src="https://img-blog.csdnimg.cn/df665340ba144e519cd2f28e0ffe7aff.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzMzMjY5NQ==,size_12,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p>MD5报文将以原始 16字符二进制格式返回</p>
-<p>ffifdyop 字符串经过MD5加密后为276f722736c95d99e921722cf9ed621c<br>在转换成字符串为’or’6乱码</p>
-<p>Select * from ’admin’ where password=‘or’6乱码<br>相当于万能密码</p>
-
+                
                 
             </div>
             <hr/>
@@ -556,7 +536,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/11/08/hash%E5%87%BD%E6%95%B0md%E7%BB%95%E8%BF%87/">http://example.com/2021/11/08/hash%E5%87%BD%E6%95%B0md%E7%BB%95%E8%BF%87/</a>
+                    <a href="http://example.com/2021/11/27/CRLF%E6%B3%A8%E5%85%A5/">http://example.com/2021/11/27/CRLF%E6%B3%A8%E5%85%A5/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -593,11 +573,7 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            
-                                <a href="/tags/Md5%E7%BB%95%E8%BF%87/">
-                                    <span class="chip bg-color">Md5绕过</span>
-                                </a>
-                            
+                            <span class="chip bg-color">无标签</span>
                         </div>
                     
                 </div>
@@ -1033,9 +1009,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/11/27/CRLF%E6%B3%A8%E5%85%A5/">
                     <div class="card-image">
@@ -1053,9 +1030,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-11-27
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-27
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -1064,6 +1041,7 @@
                         </span>
                     </div>
                 </div>
+
                 
             </div>
         </div>
@@ -1074,13 +1052,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/11/07/include%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E8%A7%A3%E5%86%B3%E4%BB%A5%E5%8F%8A%E4%BE%8B%E9%A2%98/">
+                <a href="/2021/11/08/hash%E5%87%BD%E6%95%B0md%E7%BB%95%E8%BF%87/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.png" class="responsive-img" alt="include文件包含解决以及例题">
+                        <img src="/medias/featureimages/8.png" class="responsive-img" alt="hash函数md绕过">
                         
-                        <span class="card-title">include文件包含解决以及例题</span>
+                        <span class="card-title">hash函数md绕过</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1091,7 +1069,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-07
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-08
                             </span>
                         <span class="publish-author">
                             
@@ -1100,6 +1078,14 @@
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Md5%E7%BB%95%E8%BF%87/">
+                        <span class="chip bg-color">Md5绕过</span>
+                    </a>
+                    
                 </div>
                 
             </div>

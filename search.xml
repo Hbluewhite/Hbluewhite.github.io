@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>CRLF注入</title>
+      <link href="/2021/11/27/CRLF%E6%B3%A8%E5%85%A5/"/>
+      <url>/2021/11/27/CRLF%E6%B3%A8%E5%85%A5/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>hash函数md绕过</title>
       <link href="/2021/11/08/hash%E5%87%BD%E6%95%B0md%E7%BB%95%E8%BF%87/"/>
       <url>/2021/11/08/hash%E5%87%BD%E6%95%B0md%E7%BB%95%E8%BF%87/</url>
